@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cassa & Kitchen Display System (KDS) | BellaVista</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="menu-demo.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="kds-body">
+
+  <div class="kds-container">
+    <!-- Header Monitor Cassa & Cucina -->
+    <header class="kds-header">
+      <div class="kds-title-group">
+        <h2>👨‍🍳 Monitor Cucina & Cassa Live</h2>
+        <span class="live-dot-pulse">● Sync Real-Time Attivo</span>
+      </div>
+
+      <!-- Indicatori Finanziari Turno Corrente -->
+      <div class="kds-financial-stats">
+        <div class="kds-stat-tile">
+          <span>Incasso Oggi:</span>
+          <strong class="text-green" id="kdsTotalEarned">€0.00</strong>
+        </div>
+        <div class="kds-stat-tile">
+          <span>In Sospeso / Al Tavolo:</span>
+          <strong class="text-gold" id="kdsTotalPending">€0.00</strong>
+        </div>
+      </div>
+
+      <div class="kds-actions">
+        <button class="btn-top-admin" id="openMenuAdminBtn">⚙️ Gestione Menu</button>
+        <button class="btn-service" id="openHistoryModalBtn">📊 Storico Giorni</button>
+        <button class="btn-close-shift" id="closeShiftBtn">🌙 Chiudi Turno / Nuovo Giorno</button>
+        
+        <div class="kds-view-filter">
+          <button class="kds-tab-btn active" id="filterActiveBtn">In Lavorazione (<span id="kdsActiveCount">0</span>)</button>
+          <button class="kds-tab-btn" id="filterBillingBtn">Da Incassare (<span id="kdsBillingCount">0</span>)</button>
+          <button class="kds-tab-btn" id="filterHistoryBtn">Comande Turno (<span id="kdsHistoryCount">0</span>)</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="kds-orders-grid" id="kdsOrdersContainer">
+      <!-- Comande iniettate via JS -->
+    </main>
+  </div>
+
+  <!-- MODALE MODIFICA COMANDA -->
+  <div class="modal-overlay" id="editOrderModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 id="editOrderModalTitle">Modifica Comanda #101</h3>
+          <small id="editOrderTableSub">Tavolo 04</small>
+        </div>
+        <button class="modal-close" id="closeEditOrderModalBtn">&times;</button>
+      </div>
+
+      <div class="edit-order-body">
+        <label style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Portate nella Comanda:</label>
+        <div class="edit-order-items-list" id="editOrderItemsContainer"></div>
+
+        <div class="add-item-to-order-row">
+          <select id="quickAddDishSelect"></select>
+          <button class="btn-service" id="quickAddDishBtn">+ Aggiungi Piatto</button>
+        </div>
+
+        <div class="order-notes-group" style="margin-top:14px;">
+          <label for="editOrderNotesInput">Note Cucina:</label>
+          <textarea id="editOrderNotesInput" rows="2"></textarea>
+        </div>
+
+        <div class="checkout-total-row" style="margin-top:14px;">
+          <span>Nuovo Totale:</span>
+          <strong id="editOrderTotalText">€0.00</strong>
+        </div>
+
+        <button class="btn-direct-order" id="saveEditedOrderBtn" style="margin-top:12px;">
+          💾 Salva Modifiche Comanda
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE STORICO GIORNATE PRECEDENTI -->
+  <div class="modal-overlay" id="dailyHistoryModal">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <div>
+          <h3>Archivio Incassi Giornalieri</h3>
+          <small>Riepilogo fiscale dei turni chiusi in precedenza</small>
+        </div>
+        <button class="modal-close" id="closeDailyHistoryModalBtn">&times;</button>
+      </div>
+
+      <div class="history-modal-summary">
+        <div class="hist-stat-box">
+          <span>Totale Storico Cumulativo:</span>
+          <strong class="text-green" id="histGrandTotal">€0.00</strong>
+        </div>
+        <div class="hist-stat-box">
+          <span>Giornate Registrate:</span>
+          <strong id="histTotalDays">0</strong>
+        </div>
+      </div>
+
+      <div class="table-scroll-area" style="max-height: 280px; overflow-y: auto; margin-top: 14px;">
+        <table class="data-table" style="width: 100%;">
+          <thead>
+            <tr>
+              <th>Data & Ora Chiusura</th>
+              <th>Comande Evase</th>
+              <th>Scontrino Medio</th>
+              <th>Incasso Totale</th>
+            </tr>
+          </thead>
+          <tbody id="dailyHistoryTableBody"></tbody>
+        </table>
+      </div>
+
+      <button class="btn-service full-width" style="margin-top: 18px;" id="closeDailyHistoryBtn">Chiudi Archivio</button>
+    </div>
+  </div>
+
+  <!-- PANNELLO GESTIONE MENU & DISPONIBILITÀ -->
+  <div class="admin-drawer" id="adminMenuDrawer">
+    <div class="admin-drawer-header">
+      <div>
+        <h3>Gestione Menu & Disponibilità</h3>
+        <small>Modifica disponibilità, piatti del giorno e prezzi</small>
+      </div>
+      <button class="close-admin-btn" id="closeAdminMenuDrawerBtn">&times;</button>
+    </div>
+    <div class="admin-drawer-body" id="adminMenuDrawerList"></div>
+  </div>
+
+  <div class="menu-toast" id="menuToast">Notifica</div>
+
+  <script src="menu-shared.js"></script>
+  <script src="kds-demo.js"></script>
+</body>
+</html>

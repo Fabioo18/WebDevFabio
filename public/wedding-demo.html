@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Manager Pro | Dashboard Gestionale</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="wedding-demo.css">
+</head>
+<body>
+
+  <!-- Demo Alert Top Bar -->
+  <aside class="demo-alert-bar">
+    <div class="alert-content">
+      <span>⚠️ <strong>Modalità Demo Attiva</strong> • Tutte le modifiche sono salvate in locale nel tuo browser. Sviluppato da <strong>webdev.fabio</strong></span>
+      <div class="alert-actions">
+        <button class="btn-top-reset" id="resetDataBtn" title="Ripristina dati iniziali">Ripristina Dati Demo</button>
+        <a href="index.html" class="btn-top-back">← Portfolio</a>
+        <a href="https://www.instagram.com/webdev.fabio" target="_blank" rel="noopener noreferrer" class="btn-top-order">Richiedi Gestionale</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand-box">
+        <div class="brand-logo">MW</div>
+        <div class="brand-text">
+          <strong>Wedding Admin</strong>
+          <small>v2.4 Pro</small>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-link active" data-tab="dashboard">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-title">Dashboard iniziale</span>
+        </a>
+
+        <div class="nav-section-title">Wedding Manager</div>
+        
+        <a href="#tavoli" class="nav-link" data-tab="tavoli">
+          <span class="nav-icon">🍽️</span>
+          <span class="nav-title">Gestore di Tavoli</span>
+          <span class="nav-badge" id="badgeTables">0</span>
+        </a>
+
+        <a href="#impegni" class="nav-link" data-tab="impegni">
+          <span class="nav-icon">✔️</span>
+          <span class="nav-title">Lista impegni</span>
+          <span class="nav-badge" id="badgeTodos">0</span>
+        </a>
+
+        <a href="#note" class="nav-link" data-tab="note">
+          <span class="nav-icon">📖</span>
+          <span class="nav-title">Note</span>
+        </a>
+
+        <a href="#budget" class="nav-link" data-tab="budget">
+          <span class="nav-icon">💵</span>
+          <span class="nav-title">Budget Manager</span>
+          <span class="nav-badge badge-new">NEW</span>
+        </a>
+
+        <div class="nav-section-title">Eventi</div>
+
+        <a href="#gruppi" class="nav-link" data-tab="gruppi">
+          <span class="nav-icon">👥</span>
+          <span class="nav-title">Gruppi Invitati</span>
+        </a>
+
+        <a href="#invitati" class="nav-link" data-tab="invitati">
+          <span class="nav-icon">👤</span>
+          <span class="nav-title">Invitati</span>
+          <span class="nav-badge" id="badgeGuests">0</span>
+        </a>
+
+        <a href="#locations" class="nav-link" data-tab="locations">
+          <span class="nav-icon">📍</span>
+          <span class="nav-title">Locations</span>
+        </a>
+
+        <a href="#gallery" class="nav-link" data-tab="gallery">
+          <span class="nav-icon">🖼️</span>
+          <span class="nav-title">Gallery</span>
+        </a>
+
+        <div class="nav-section-title">Accesso</div>
+
+        <a href="#utenti" class="nav-link" data-tab="utenti">
+          <span class="nav-icon">👤</span>
+          <span class="nav-title">Utenti</span>
+        </a>
+
+        <a href="#qrcode" class="nav-link" data-tab="qrcode">
+          <span class="nav-icon">📱</span>
+          <span class="nav-title">QR Code</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-user-pill">
+        <div class="user-avatar-initials">UD</div>
+        <div class="user-meta">
+          <strong>Utente Demo</strong>
+          <small>Sposi / Admin</small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Viewport -->
+    <main class="main-viewport">
+      
+      <!-- ====================================================================
+           1. DASHBOARD INIZIALE
+           ==================================================================== -->
+      <section id="view-dashboard" class="tab-pane active">
+        <div class="view-header-flex">
+          <div>
+            <h1>Benvenuto/a Utente Demo ✨</h1>
+            <p class="header-sub">Panoramica finanziaria e stato dell'evento in tempo reale.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-rose-main" onclick="switchTab('tavoli')">Gestione Tavoli</button>
+            <button class="btn-outline-action" onclick="switchTab('budget')">Budget Manager</button>
+          </div>
+        </div>
+
+        <!-- 10 KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-box">
+            <div class="kpi-head"><span>👥</span> Ospiti confermati</div>
+            <div class="kpi-num" id="kpiGuests">0</div>
+            <div class="kpi-sub">Numero totale di ospiti che hanno confermato</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>💶</span> Budget per persona</div>
+            <div class="kpi-num" id="kpiBudgetPerGuest">€0.00</div>
+            <div class="kpi-sub">Budget stanziato diviso per ospiti confermati</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>📑</span> Preventivo per persona</div>
+            <div class="kpi-num" id="kpiQuotePerGuest">€0.00</div>
+            <div class="kpi-sub">Preventivi totali divisi per ospiti confermati</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>💳</span> Spesa per persona</div>
+            <div class="kpi-num" id="kpiSpentPerGuest">€0.00</div>
+            <div class="kpi-sub">Quanto speso finora per ogni ospite</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>🏛️</span> Budget stanziato</div>
+            <div class="kpi-num" id="kpiAllocatedBudget">€40,000.00</div>
+            <div class="kpi-sub">Il budget totale disponibile per l'evento</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>📊</span> Preventivi totali</div>
+            <div class="kpi-num" id="kpiTotalQuotes">€0.00</div>
+            <div class="kpi-sub">Somma di tutti i preventivi concordati</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>🎯</span> Budget preventivato</div>
+            <div class="kpi-num text-success" id="kpiPercentBudget">0%</div>
+            <div class="kpi-sub">Percentuale dei preventivi sul budget</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>💸</span> Totale già pagato</div>
+            <div class="kpi-num text-rose" id="kpiTotalPaid">€0.00</div>
+            <div class="kpi-sub">Acconti + saldi effettivamente versati</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>⏱️</span> Budget utilizzato</div>
+            <div class="kpi-num text-success" id="kpiPercentPaid">0%</div>
+            <div class="kpi-sub">Percentuale del budget già speso</div>
+          </div>
+
+          <div class="kpi-box">
+            <div class="kpi-head"><span>💰</span> Budget rimanente</div>
+            <div class="kpi-num" id="kpiRemainingBudget">€0.00</div>
+            <div class="kpi-sub">Quanto budget rimane ancora disponibile</div>
+          </div>
+        </div>
+
+        <!-- Donut & Quick Actions -->
+        <div class="dashboard-split-row">
+          <div class="panel-card chart-card">
+            <div class="panel-card-head">
+              <h3>Distribuzione Spese per Categoria</h3>
+              <span class="badge-mini">Live Data</span>
+            </div>
+            <div class="donut-chart-box">
+              <svg viewBox="0 0 200 200" id="donutSvg"></svg>
+            </div>
+            <div class="donut-legend-grid" id="donutLegend"></div>
+          </div>
+
+          <div class="panel-card actions-panel">
+            <div class="panel-card-head">
+              <h3>Pannello di Controllo Rapido</h3>
+            </div>
+            <div class="quick-action-list">
+              <button class="qa-item" onclick="switchTab('tavoli')">
+                <span class="qa-icon">🍽️</span>
+                <div>
+                  <strong>Gestione Piantina Tavoli</strong>
+                  <small id="qaTableStats">Caricamento...</small>
+                </div>
+              </button>
+              <button class="qa-item" onclick="switchTab('impegni')">
+                <span class="qa-icon">✔️</span>
+                <div>
+                  <strong>Checklist Scadenze</strong>
+                  <small id="qaTodoStats">Caricamento...</small>
+                </div>
+              </button>
+              <button class="qa-item" onclick="switchTab('budget')">
+                <span class="qa-icon">💵</span>
+                <div>
+                  <strong>Riepilogo Fornitori & Spese</strong>
+                  <small id="qaBudgetStats">Caricamento...</small>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           2. GESTORE DI TAVOLI
+           ==================================================================== -->
+      <section id="view-tavoli" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Gestore di Tavoli</h1>
+            <p class="header-sub">Organizza la sala e assegna i tuoi ospiti ai tavoli dedicati.</p>
+          </div>
+          <button class="btn-outline-action" onclick="window.print()">🖨️ Stampa tavoli</button>
+        </div>
+
+        <div class="info-card">
+          <p>
+            Benvenuti nella sezione di gestione dei tavoli! Qui potete organizzare gli ospiti nei vari tavoli del vostro evento in modo intuitivo. Potete 
+            <span class="highlight-rose">creare nuovi tavoli</span>, <span class="highlight-rose">assegnare o rimuovere ospiti</span> e monitorare facilmente le preferenze alimentari.
+          </p>
+          <p class="info-sub">La barra di avanzamento vi aiuta a visualizzare quanti ospiti sono già stati assegnati rispetto al totale degli invitati.</p>
+          
+          <details class="info-dropdown">
+            <summary>Come utilizzare questa pagina</summary>
+            <div class="dropdown-body">
+              1. Crea un tavolo digitando il nome e premendo "Aggiungi Tavolo".<br>
+              2. Clicca "+ Aggiungi Ospite" nel tavolo per inserire partecipanti, ruoli e allergie.<br>
+              3. Rimuovi gli ospiti con la 'X' per aggiornare il conteggio in tempo reale.
+            </div>
+          </details>
+        </div>
+
+        <div class="progress-container-box">
+          <div class="progress-label">
+            Ospiti assegnati: <strong id="assignedCountText">0 / 0</strong>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar-fill" id="assignedProgressBar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="create-table-bar">
+          <input type="text" id="newTableNameInput" placeholder="Dai un nome al tavolo (es. Orchidea, Rosa, Sposi)...">
+          <button type="button" class="btn-rose-main" id="addTableBtn">
+            <span>➕</span> Aggiungi Tavolo
+          </button>
+        </div>
+
+        <div class="tables-toolbar">
+          <div class="toolbar-buttons">
+            <button class="btn-tool" id="collapseAllTablesBtn">˄ Collassa tutti</button>
+            <button class="btn-tool" id="expandAllTablesBtn">˅ Estendi tutti</button>
+          </div>
+
+          <div class="toolbar-search">
+            <input type="text" id="searchTablesInput" placeholder="Cerca tavolo o ospite...">
+            <select class="select-tool" id="sortTablesSelect">
+              <option value="default">Data di creazione</option>
+              <option value="name">Nome tavolo (A-Z)</option>
+              <option value="seats">Numero di ospiti (decrescente)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="tables-columns-grid" id="tablesColumnsGrid"></div>
+      </section>
+
+      <!-- ====================================================================
+           3. LISTA IMPEGNI (TO-DO)
+           ==================================================================== -->
+      <section id="view-impegni" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Lista Impegni</h1>
+            <p class="header-sub">Gestisci le scadenze e le attività con la to-do list interattiva.</p>
+          </div>
+          <button class="btn-rose-main" id="openAddTodoModalBtn">➕ Nuovo impegno</button>
+        </div>
+
+        <div class="info-card">
+          <p>
+            Questa pagina vi permette di gestire in modo efficace le vostre attività. Potete 
+            <span class="highlight-rose">aggiungere nuove attività</span>, <span class="highlight-rose">contrassegnare quelle completate tramite switch</span> e tenere traccia delle <span class="highlight-rose">scadenze importanti</span>.
+          </p>
+          <p class="info-sub">La barra di avanzamento monitora in tempo reale la percentuale di completamento.</p>
+        </div>
+
+        <div class="progress-container-box">
+          <div class="progress-label">Stato di completamento</div>
+          <div class="progress-track">
+            <div class="progress-bar-fill" id="todoProgressBar" style="width: 0%;"></div>
+          </div>
+          <div class="progress-sub-stat" id="todoStatsText">
+            Caricamento...
+          </div>
+        </div>
+
+        <div class="table-card-wrapper">
+          <div class="todo-table-topbar">
+            <div class="table-filters-left">
+              <input type="text" id="searchTodoInput" class="table-search-input" placeholder="Cerca impegno per titolo o responsabile...">
+              <select id="filterTodoStatus" class="select-tool">
+                <option value="all">Tutti gli stati</option>
+                <option value="pending">Solo da completare</option>
+                <option value="completed">Solo completati</option>
+              </select>
+            </div>
+            <button class="btn-tool" id="deleteCompletedTodosBtn">Pulisci completati</button>
+          </div>
+
+          <div class="table-scroll-area">
+            <table class="mw-data-table">
+              <thead>
+                <tr>
+                  <th width="40"><input type="checkbox" id="selectAllTodos"></th>
+                  <th>Titolo</th>
+                  <th>Chi se ne occupa?</th>
+                  <th>Deadline</th>
+                  <th>Fatto!</th>
+                  <th width="50">Azione</th>
+                </tr>
+              </thead>
+              <tbody id="todoTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           4. NOTE
+           ==================================================================== -->
+      <section id="view-note" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Note & Appunti</h1>
+            <p class="header-sub">Scrivi bozze, idee, contatti fornitori o accordi presi.</p>
+          </div>
+          <button class="btn-rose-main" id="saveNotesBtn">💾 Salva Modifiche</button>
+        </div>
+
+        <div class="panel-card">
+          <textarea id="notesArea" class="form-textarea-full" placeholder="Scrivi qui qualsiasi appunto o nota importante per il tuo matrimonio..."></textarea>
+          <div class="notes-footer">
+            <span id="notesStatusText">Tutte le modifiche sono sincronizzate in locale.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           5. BUDGET MANAGER
+           ==================================================================== -->
+      <section id="view-budget" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Budget Manager Avanzato</h1>
+            <p class="header-sub">Tieni traccia di preventivi concordati, acconti e saldi fornitori.</p>
+          </div>
+          <button class="btn-rose-main" id="openAddExpenseModalBtn">➕ Aggiungi Voce di Spesa</button>
+        </div>
+
+        <div class="budget-summary-banner">
+          <div class="budget-stat-item">
+            <span>Budget Totale:</span>
+            <strong id="bSumAllocated">€40,000.00</strong>
+          </div>
+          <div class="budget-stat-item">
+            <span>Preventivi Accordati:</span>
+            <strong id="bSumQuotes">€0.00</strong>
+          </div>
+          <div class="budget-stat-item">
+            <span>Totale Già Pagato:</span>
+            <strong class="text-rose" id="bSumPaid">€0.00</strong>
+          </div>
+          <div class="budget-stat-item">
+            <span>Disponibilità Rimanente:</span>
+            <strong class="text-success" id="bSumRemaining">€0.00</strong>
+          </div>
+        </div>
+
+        <div class="table-card-wrapper">
+          <div class="table-scroll-area">
+            <table class="mw-data-table">
+              <thead>
+                <tr>
+                  <th>Fornitore / Servizio</th>
+                  <th>Categoria</th>
+                  <th>Preventivo Concordato</th>
+                  <th>Acconti / Pagato</th>
+                  <th>Saldo Residuo</th>
+                  <th>Stato Pagamento</th>
+                  <th width="80">Azione</th>
+                </tr>
+              </thead>
+              <tbody id="budgetTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           6. GRUPPI INVITATI
+           ==================================================================== -->
+      <section id="view-gruppi" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Gruppi Invitati</h1>
+            <p class="header-sub">Suddivisione delle presenze per categorie e legami familiari.</p>
+          </div>
+          <button class="btn-rose-main" id="openAddGroupModalBtn">➕ Nuovo Gruppo</button>
+        </div>
+
+        <div class="groups-cards-grid" id="groupsGridContainer"></div>
+      </section>
+
+      <!-- ====================================================================
+           7. INVITATI & RSVP
+           ==================================================================== -->
+      <section id="view-invitati" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Lista Completa Invitati & RSVP</h1>
+            <p class="header-sub">Anagrafica completa degli ospiti, conferme e gestione coperti.</p>
+          </div>
+          <button class="btn-rose-main" id="openAddGuestModalBtn">➕ Aggiungi Ospite</button>
+        </div>
+
+        <div class="table-card-wrapper">
+          <div class="todo-table-topbar">
+            <input type="text" id="searchGlobalGuests" class="table-search-input" placeholder="Cerca ospite per nome, gruppo o dieta...">
+            <select id="filterGlobalGuestGroup" class="select-tool">
+              <option value="all">Tutti i gruppi</option>
+            </select>
+          </div>
+
+          <div class="table-scroll-area">
+            <table class="mw-data-table">
+              <thead>
+                <tr>
+                  <th>Nome e Cognome</th>
+                  <th>Gruppo</th>
+                  <th>Posti / Coperti</th>
+                  <th>Preferenze / Allergie</th>
+                  <th>Tavolo Assegnato</th>
+                  <th>Stato RSVP</th>
+                  <th width="50">Azione</th>
+                </tr>
+              </thead>
+              <tbody id="globalGuestsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           8. LOCATIONS
+           ==================================================================== -->
+      <section id="view-locations" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Locations dell'Evento</h1>
+            <p class="header-sub">Dettagli logistici, orari e indirizzi dei luoghi del matrimonio.</p>
+          </div>
+        </div>
+
+        <div class="locations-cards-grid" id="locationsGridContainer"></div>
+      </section>
+
+      <!-- ====================================================================
+           9. GALLERY CONDIVISA
+           ==================================================================== -->
+      <section id="view-gallery" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Gallery Fotografica Condivisa</h1>
+            <p class="header-sub">Spazio per raccogliere le foto caricate live dagli ospiti tramite QR Code.</p>
+          </div>
+          <button class="btn-rose-main" id="uploadPhotoSimBtn">📷 Simula Caricamento Foto</button>
+        </div>
+
+        <div class="gallery-dynamic-grid" id="galleryContainer"></div>
+      </section>
+
+      <!-- ====================================================================
+           10. UTENTI
+           ==================================================================== -->
+      <section id="view-utenti" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>Gestione Utenti & Ruoli</h1>
+            <p class="header-sub">Accessi e permessi configurati per la gestione del matrimonio.</p>
+          </div>
+          <button class="btn-rose-main" id="openAddUserModalBtn">➕ Aggiungi Utente</button>
+        </div>
+
+        <div class="table-card-wrapper">
+          <div class="table-scroll-area">
+            <table class="mw-data-table">
+              <thead>
+                <tr>
+                  <th>Nome Utente</th>
+                  <th>Email</th>
+                  <th>Ruolo</th>
+                  <th>Permessi</th>
+                  <th>Stato</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           11. QR CODE PER I TAVOLI
+           ==================================================================== -->
+      <section id="view-qrcode" class="tab-pane">
+        <div class="view-header-flex">
+          <div>
+            <h1>QR Code Segnaposto per i Tavoli</h1>
+            <p class="header-sub">Genera e stampa i cartellini per consentire agli ospiti l'accesso istantaneo al menu e alla gallery.</p>
+          </div>
+          <button class="btn-rose-main" onclick="window.print()">🖨️ Stampa Tutti i Segnaposto</button>
+        </div>
+
+        <div class="qr-printable-grid" id="qrCardsContainer"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       MODALI INTERATTIVE GENERICHE
+       ====================================================================== -->
+  <div class="modal-overlay" id="appModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Titolo Modale</h3>
+        <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="wedding-demo.js"></script>
+</body>
+
+
+</html>

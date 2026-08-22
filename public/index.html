@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sviluppo web su misura per professionisti e aziende. Sistemi di prenotazione, portfolio, pagine link-in-bio e siti vetrina ad altissime prestazioni.">
+  <title>WebDevFabio | Soluzioni Web & Sistemi Interattivi</title>
+  
+  <!-- Font Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Foglio di Stile Esterno -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Canvas di sfondo interattivo -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Navbar -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <span class="logo-symbol">&lt;/&gt;</span>
+        <span>webdev.fabio</span>
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="#services" class="nav-link">Servizi</a></li>
+          <li><a href="#portfolio" class="nav-link">Showcase</a></li>
+          <li><a href="#calculator" class="nav-link">Calcolatore</a></li>
+          <li><a href="#process" class="nav-link">Metodo</a></li>
+          <li><a href="#contact" class="nav-link">Contatti</a></li>
+        </ul>
+        <a href="https://www.instagram.com/webdev.fabio" target="_blank" rel="noopener noreferrer" class="btn btn-outline nav-cta">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" style="display:inline-block; vertical-align:middle; margin-right:6px;">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+          @webdev.fabio
+        </a>
+      </nav>
+
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container hero-container">
+      <div class="hero-badge reveal">
+        <span class="pulse-dot"></span>
+        <span>Disponibile per nuovi progetti • Consegne in 5-10 giorni</span>
+      </div>
+
+      <h1 class="hero-title reveal">
+        Siti web su misura che <br>
+        <span class="gradient-text">trasformano visite in clienti</span>.
+      </h1>
+
+      <p class="hero-subtitle reveal">
+        Sistemi di prenotazione automatizzati, hub link-in-bio proprietari e siti vetrina costruiti in <strong>codice puro</strong>: veloci, leggeri, sicuri e senza canoni nascosti di piattaforma.
+      </p>
+
+      <div class="hero-actions reveal">
+        <a href="#calculator" class="btn btn-primary">Calcola Preventivo Istantaneo</a>
+        <a href="#portfolio" class="btn btn-glass">Guarda le Demo Live</a>
+      </div>
+
+      <!-- Metriche di Fiducia -->
+      <div class="hero-stats reveal">
+        <div class="stat-card">
+          <div class="stat-value" data-count="100">0</div>
+          <div class="stat-label">PageSpeed Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" data-count="0">0</div>
+          <div class="stat-label">Costi di abbonamento CMS</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" data-count="100">0</div>
+          <div class="stat-label">% Codice Proprietario</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sezione Servizi -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="badge-tag">Cosa Realizzo</span>
+        <h2>Soluzioni mirate per professionisti e imprese</h2>
+        <p>Ogni settore ha necessità diverse: ecco i prodotti digitali più richiesti e redditizi per la tua attività.</p>
+      </div>
+
+      <div class="grid-cards">
+        <!-- Scheda 1 -->
+        <div class="card service-card reveal">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Sistemi di Prenotazione</h3>
+          <p>Ideale per studi medici, barbieri, personal trainer e consulenti. I tuoi clienti scelgono data, ora e servizio senza scambi infiniti di messaggi.</p>
+          <ul class="feature-list">
+            <li>Sincronizzazione oraria real-time</li>
+            <li>Zero commissioni per singola prenotazione</li>
+            <li>Conferma via email o WhatsApp</li>
+          </ul>
+        </div>
+
+        <!-- Scheda 2 -->
+        <div class="card service-card reveal">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+          </div>
+          <h3>Link-in-Bio & Hub Social</h3>
+          <p>Alternativa elegante e proprietaria a Linktree. Connetti Instagram, TikTok e LinkedIn a una pagina veloce con i tuoi servizi di punta.</p>
+          <ul class="feature-list">
+            <li>Caricamento in meno di 0.3 secondi</li>
+            <li>100% brandizzato con il tuo stile</li>
+            <li>Tracciamento conversioni e statistiche</li>
+          </ul>
+        </div>
+
+        <!-- Scheda 3 -->
+        <div class="card service-card reveal">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
+          </div>
+          <h3>Portfolio & Siti Personali</h3>
+          <p>Metti in risalto i tuoi lavori, certificazioni e case history con layout moderni studiati per trasmettere autorità e chiudere contratti.</p>
+          <ul class="feature-list">
+            <li>Gallerie dinamiche e filtri interattivi</li>
+            <li>Design mobile-first reattivo</li>
+            <li>Ottimizzazione SEO e metadata social</li>
+          </ul>
+        </div>
+
+        <!-- Scheda 4 -->
+        <div class="card service-card reveal">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <h3>Siti Vetrina & Landing Page</h3>
+          <p>Pagine d'impatto pensate per attività locali, ristoranti e PMI che desiderano presentarsi con un'immagine autorevole e chiara.</p>
+          <ul class="feature-list">
+            <li>Modulo di contatto e richiesta preventivo</li>
+            <li>Integrazione mappe e recensioni</li>
+            <li>Design pulito e copywriting mirato</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase / Portfolio Interattivo -->
+  <section class="section" id="portfolio">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="badge-tag">Showcase & Demo</span>
+        <h2>Tocca con mano le soluzioni</h2>
+        <p>Esplora i siti live e testa direttamente le demo funzionanti.</p>
+      </div>
+
+      <!-- Filtri -->
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">Tutti i Progetti</button>
+        <button class="filter-btn" data-filter="booking">Prenotazioni</button>
+        <button class="filter-btn" data-filter="landing">Wedding & Eventi</button>
+        <button class="filter-btn" data-filter="linktree">Linktree Hub</button>
+        <button class="filter-btn" data-filter="portfolio">Portfolio</button>
+      </div>
+
+      <div class="grid-cards portfolio-grid" id="portfolioGrid">
+        <!-- 1. Progetto Reale: Parrucchiere Booking -->
+        <div class="card project-card reveal" data-category="booking">
+          <div class="project-thumb">
+            <span class="tech-badge">Sito Live</span>
+            <div class="mockup-icon" style="color: var(--accent-cyan);">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="6" cy="6" r="3"></circle>
+                <circle cx="6" cy="18" r="3"></circle>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Case Study Reale • Saloni</span>
+            <h3>Salone Parrucchieri & Barber</h3>
+            <p>Piattaforma con gestione orari autonoma, catalogo trattamenti e prenotazione diretta appuntamenti senza commissioni.</p>
+            <div class="project-actions">
+              <a href="https://parrucchiere.onrender.com/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                Apri Sito Live ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Demo Live: Wedding & Eventi -->
+        <div class="card project-card reveal" data-category="landing">
+          <div class="project-thumb">
+            <span class="tech-badge">Demo Online</span>
+            <div class="mockup-icon" style="color: #e08b9b;">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="8" cy="12" r="5"></circle>
+                <circle cx="16" cy="12" r="5"></circle>
+                <path d="M11 7.5a5 5 0 0 1 2 0"></path>
+                <path d="M11 16.5a5 5 0 0 0 2 0"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Wedding & Ricevimenti</span>
+            <h3>Marco & Sofia • Wedding Site</h3>
+            <p>Gestionale nozze con piantina tavoli interattiva, gestione coperti, lista impegni e monitoraggio budget fornitori.</p>
+            <div class="project-actions">
+              <a href="wedding-demo.html" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                Apri Demo Live ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Demo Live: Link-in-Bio & Social Hub -->
+        <div class="card project-card reveal" data-category="linktree">
+          <div class="project-thumb">
+            <span class="tech-badge">Live Hub Pro</span>
+            <div class="mockup-icon" style="color: var(--accent-cyan);">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                <path d="M9 7h6"></path>
+                <path d="M9 11h6"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Social Link Hub</span>
+            <h3>Creator & Brand Hub</h3>
+            <p>Alternativa proprietaria a Linktree con tracciamento click live, pannello admin per modifiche in tempo reale e selettore temi.</p>
+            <div class="project-actions">
+              <a href="linktree-demo.html" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                Apri Demo Live ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Demo Live: Menu Digitale Interattivo -->
+        <div class="card project-card reveal" data-category="landing">
+          <div class="project-thumb">
+            <span class="tech-badge">Live QR Menu</span>
+            <div class="mockup-icon" style="color: var(--accent-yellow, #eab308);">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Food & Beverage • Ristoranti</span>
+            <h3>BellaVista • Menu Digitale QR</h3>
+            <p>Menu ultraveloce con filtri allergeni, piatti del giorno, selezione tavolo, carrello ordini via WhatsApp e pannello admin disponibilità.</p>
+            <div class="project-actions">
+              <a href="menu-demo.html" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+                Apri Demo Live ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calcolatore di Preventivo Interattivo -->
+  <section class="section" id="calculator">
+    <div class="container">
+      <div class="calc-wrapper card reveal">
+        <div class="calc-header">
+          <span class="badge-tag">Innovazione & Trasparenza</span>
+          <h2>Calcola una stima del tuo sito</h2>
+          <p>Seleziona la tipologia di progetto e le caratteristiche desiderate per avere una stima immediata.</p>
+        </div>
+
+        <div class="calc-grid">
+          <!-- Opzioni -->
+          <div class="calc-options">
+            <div class="calc-group">
+              <label class="calc-label">1. Seleziona la tipologia principale</label>
+              <div class="radio-tiles">
+                <label class="tile-option">
+                  <input type="radio" name="siteType" value="linktree" data-price="190" checked>
+                  <div class="tile-content">
+                    <span class="tile-title">Link-in-Bio Custom</span>
+                    <span class="tile-desc">Pagina ultraveloce per i social</span>
+                  </div>
+                </label>
+
+                <label class="tile-option">
+                  <input type="radio" name="siteType" value="landing" data-price="390">
+                  <div class="tile-content">
+                    <span class="tile-title">Landing Page / Vetrina</span>
+                    <span class="tile-desc">Presentazione aziendale o servizio</span>
+                  </div>
+                </label>
+
+                <label class="tile-option">
+                  <input type="radio" name="siteType" value="booking" data-price="590">
+                  <div class="tile-content">
+                    <span class="tile-title">Sito con Prenotazioni</span>
+                    <span class="tile-desc">Gestione orari e appuntamenti</span>
+                  </div>
+                </label>
+
+                <label class="tile-option">
+                  <input type="radio" name="siteType" value="portfolio" data-price="490">
+                  <div class="tile-content">
+                    <span class="tile-title">Portfolio Professionale</span>
+                    <span class="tile-desc">Galleria lavori e presentazioni</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="calc-group">
+              <label class="calc-label">2. Funzionalità Aggiuntive</label>
+              <div class="checkbox-list">
+                <label class="check-option">
+                  <input type="checkbox" class="addon-check" value="whatsapp" data-price="60">
+                  <span>Integrazione Chat WhatsApp diretta (+60€)</span>
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" class="addon-check" value="seo" data-price="120">
+                  <span>Ottimizzazione SEO & Google Business (+120€)</span>
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" class="addon-check" value="multilang" data-price="150">
+                  <span>Versione Multilingua (IT/EN) (+150€)</span>
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" class="addon-check" value="analytics" data-price="80">
+                  <span>Privacy Policy & Google Analytics 4 (+80€)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Riepilogo Prezzo -->
+          <div class="calc-summary">
+            <div class="summary-box">
+              <span class="summary-title">Stima indicativa</span>
+              <div class="price-display">
+                <span class="currency">€</span>
+                <span id="estimatedPrice">190</span>
+              </div>
+              <p class="summary-note">Nessun costo mensile per il sito. Include ottimizzazione per smartphone e messa online.</p>
+
+              <div class="summary-features" id="summaryDetails">
+                <!-- Popolato da script.js -->
+              </div>
+
+              <button class="btn btn-primary btn-block" id="transferToFormBtn">
+                Blocca Questa Stima →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Processo di Lavoro -->
+  <section class="section" id="process">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="badge-tag">Come Lavoro</span>
+        <h2>4 Step, dalla prima idea al sito online</h2>
+      </div>
+
+      <div class="process-timeline">
+        <div class="timeline-step reveal">
+          <div class="step-badge">01</div>
+          <h3>1. Briefing & Strategia</h3>
+          <p>Analisi rapida degli obiettivi, scelta dello stile e definizione delle funzionalità chiave.</p>
+        </div>
+
+        <div class="timeline-step reveal">
+          <div class="step-badge">02</div>
+          <h3>2. Prototipo & Wireframe</h3>
+          <p>Impostazione grafica della struttura per convalidare testi, gerarchia e usabilità prima dello sviluppo.</p>
+        </div>
+
+        <div class="timeline-step reveal">
+          <div class="step-badge">03</div>
+          <h3>3. Scrittura Codice Puro</h3>
+          <p>Sviluppo in HTML5, CSS3 moderno e JS reattivo. Niente plugin lenti né librerie pesanti.</p>
+        </div>
+
+        <div class="timeline-step reveal">
+          <div class="step-badge">04</div>
+          <h3>4. Test & Messa Online</h3>
+          <p>Verifica su tutti i dispositivi mobili, indicizzazione su Google e consegna dei sorgenti.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sezione Contatti -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="contact-box card reveal">
+        <div class="contact-text">
+          <span class="badge-tag">Contattami</span>
+          <h2>Parliamo del tuo nuovo sito</h2>
+          <p>Compila i campi qui a fianco: riceverai una risposta dettagliata con proposte e preventivo formale entro 24 ore.</p>
+
+          <div class="contact-details">
+            <div class="detail-row">
+              <div class="detail-icon">
+                <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Instagram Ufficiale</strong>
+                <p><a href="https://www.instagram.com/webdev.fabio" target="_blank" rel="noopener noreferrer" style="color: var(--accent-cyan); text-decoration: none;">@webdev.fabio</a></p>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </div>
+              <div>
+                <strong>Tempi rapidi</strong>
+                <p>Risposta garantita entro 24 ore</p>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <div>
+                <strong>Codice Proprietario</strong>
+                <p>Tutti i sorgenti consegnati al cliente</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="mainContactForm">
+          <div class="form-field">
+            <label for="clientName">Nome & Cognome / Azienda</label>
+            <input type="text" id="clientName" name="name" required placeholder="Es. Marco Bianchi">
+          </div>
+
+          <div class="form-field">
+            <label for="clientEmail">Email di Contatto</label>
+            <input type="email" id="clientEmail" name="email" required placeholder="marco@azienda.it">
+          </div>
+
+          <div class="form-field">
+            <label for="clientProjectType">Progetto Selezionato</label>
+            <input type="text" id="clientProjectType" name="project_type" readonly value="Link-in-Bio Custom">
+          </div>
+
+          <div class="form-field">
+            <label for="clientBudget">Budget Stimato</label>
+            <input type="text" id="clientBudget" name="budget" readonly value="€ 190">
+          </div>
+
+          <div class="form-field">
+            <label for="clientMessage">Note Aggiuntive / Obiettivi</label>
+            <textarea id="clientMessage" name="message" rows="4" placeholder="Descrivi la tua attività, i tuoi servizi principali o se hai già un dominio attivo..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Invia Richiesta di Preventivo</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Coerente con il Portfolio -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Colonna 1: Social -->
+        <div class="footer-col">
+          <h4>Seguimi</h4>
+          <div class="social-icons">
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/webdev.fabio" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+            <!-- GitHub -->
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+            <!-- TikTok -->
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 2.89 3.5 2.76 1.43-.03 2.75-.92 3.21-2.27.24-.65.25-1.34.24-2.02V.02z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Colonna 2: Servizi Principali -->
+        <div class="footer-col">
+          <h4>Cosa Faccio</h4>
+          <ul class="footer-nav">
+            <li><a href="#services">Sistemi di Prenotazione</a></li>
+            <li><a href="#services">Portfolio & Siti Personali</a></li>
+            <li><a href="#services">Link-in-Bio Proprietari</a></li>
+            <li><a href="#services">Landing Page & Vetrine</a></li>
+          </ul>
+        </div>
+
+        <!-- Colonna 3: Navigazione Rapida -->
+        <div class="footer-col">
+          <h4>Link Utili</h4>
+          <ul class="footer-nav">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#portfolio">Showcase Progetti</a></li>
+            <li><a href="#calculator">Calcolatore Costi</a></li>
+            <li><a href="#process">Metodo di Lavoro</a></li>
+          </ul>
+        </div>
+
+        <!-- Colonna 4: Contatti -->
+        <div class="footer-col">
+          <h4>Contatti</h4>
+          <p>Email: <a href="mailto:info@tuodominio.it">info@tuodominio.it</a></p>
+          <p>Instagram: <a href="https://www.instagram.com/webdev.fabio" target="_blank" rel="noopener noreferrer">@webdev.fabio</a></p>
+          <p>WhatsApp: <a href="https://wa.me/391234567890" target="_blank" rel="noopener noreferrer">+39 123 456 7890</a></p>
+          <p>Sede: Remoto / Tutta Italia</p>
+        </div>
+      </div>
+
+      <!-- Copyright & Badge -->
+      <div class="footer-bottom">
+        <p>© 2026 webdev.fabio • Tutti i diritti riservati</p>
+        <div class="powered-badge">
+          <span>Powered By</span>
+          <a href="https://www.instagram.com/webdev.fabio" target="_blank" rel="noopener noreferrer">webdev.fabio</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Fluttuante -->
+  <a href="https://wa.me/391234567890" target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Contattami su WhatsApp">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.275.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.13.56 4.13 1.537 5.867l-1.637 5.975 6.134-1.609c1.678.915 3.597 1.434 5.633 1.434 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12zm0 22.04c-1.897 0-3.66-.549-5.148-1.493l-.369-.233-3.821 1.002 1.02-3.722-.256-.407c-1.04-1.657-1.593-3.578-1.593-5.547 0-5.534 4.505-10.04 10.04-10.04s10.04 4.506 10.04 10.04c0 5.534-4.505 10.04-10.04 10.04z"/>
+    </svg>
+  </a>
+
+  <!-- MODALE LIVE DEMO INTERATTIVA -->
+  <div class="modal-overlay" id="demoModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge" id="modalBadge">DEMO LIVE</span>
+          <h3 id="modalTitle">Titolo Progetto</h3>
+        </div>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="modalContent">
+        <!-- Il componente interattivo viene iniettato via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenitore Notifiche Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Script Esterno -->
+  <script src="script.js"></script>
+</body>
+</html>
