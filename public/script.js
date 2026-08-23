@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   /* ==========================================================================
      5. CALCOLATORE DI PREVENTIVO DINAMICO
-     ========================================================================== */
+     
   function initCalculator() {
     const typeRadios = document.querySelectorAll('input[name="siteType"]');
     const addons = document.querySelectorAll('.addon-check');
@@ -272,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+    ========================================================================== */
   
   /* ==========================================================================
      6. MODALE CON DEMO LIVE INTERATTIVE
@@ -370,24 +371,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  /* ==========================================================================
+
+/* ==========================================================================
      7. GESTIONE INVIO FORM & NOTIFICHE TOAST
      ========================================================================== */
-  function initContactForm() {
+ function initContactForm() {
     const form = document.getElementById('mainContactForm');
-    if (!form) return;
+    const btn = document.getElementById('submitBtn');
+    
+    if (!form && !btn) return;
+
+    const handler = (e) => {
+      if (e) e.preventDefault();
   
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-  
-      const name = document.getElementById('clientName').value.trim();
-      const email = document.getElementById('clientEmail').value.trim();
-      const project = document.getElementById('clientProjectType').value;
-      const budget = document.getElementById('clientBudget').value;
-      const msg = document.getElementById('clientMessage').value.trim();
+      const nameInput = document.getElementById('clientName');
+      const emailInput = document.getElementById('clientEmail');
+      const projectSelect = document.getElementById('clientProjectType');
+      const budgetInput = document.getElementById('clientBudget');
+      const msgInput = document.getElementById('clientMessage');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const email = emailInput ? emailInput.value.trim() : '';
+      const project = projectSelect ? projectSelect.value : '';
+      const budget = budgetInput ? budgetInput.value.trim() : '';
+      const msg = msgInput ? msgInput.value.trim() : '';
   
       if (!name || !email) {
-        showToast('Per favore, compila tutti i campi obbligatori.');
+        showToast('Per favore, compila i campi obbligatori (Nome e Email).');
+        return;
+      }
+
+      if (!project) {
+        showToast('Per favore, seleziona un servizio dal menu a tendina.');
+        return;
+      }
+
+      if (!budget) {
+        showToast('Per favore, inserisci un budget stimato.');
         return;
       }
   
@@ -396,34 +416,24 @@ document.addEventListener('DOMContentLoaded', () => {
       const mailtoBody = encodeURIComponent(
         `Nome / Azienda: ${name}\n` +
         `Email: ${email}\n` +
-        `Tipologia: ${project}\n` +
-        `Stima Preventivo: ${budget}\n\n` +
-        `Dettagli:\n${msg || 'Nessun messaggio aggiuntivo fornito.'}`
+        `Servizio Selezionato: ${project}\n` +
+        `Budget Indicato: ${budget}\n\n` +
+        `Note / Dettagli:\n${msg || 'Nessun messaggio aggiuntivo fornito.'}`
       );
   
-      // Apri il client email
-      window.location.href = `mailto:lacarbonarafabio18@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
+      // Apertura client email
+      window.location.href = `mailto:webdevfabio@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
       showToast('Apertura client email in corso...');
-      form.reset();
-    });
+    };
+
+    if (form) {
+      form.addEventListener('submit', handler);
+    }
+    if (btn) {
+      btn.addEventListener('click', handler);
+    }
   }
-  
-  function showToast(message) {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-  
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.innerHTML = `<span>⚡</span><span>${message}</span>`;
-    container.appendChild(toast);
-  
-    setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(10px)';
-      setTimeout(() => toast.remove(), 300);
-    }, 3500);
-  }
-  
+
   /* ==========================================================================
      8. MENU MOBILE HAMBURGER
      ========================================================================== */
