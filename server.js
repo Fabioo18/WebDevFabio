@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const nodemailer = require('nodemailer');
 
 const app = express();
 const http = require('http').createServer(app);
@@ -23,7 +22,7 @@ app.get('/wedding-website', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'wedding-demo.html'));
 });
 
-// Endpoint API Invio Preventivi con forzatura IPv4 per Render
+// Endpoint API Invio Preventivi via HTTPS (Resend API)
 app.post('/api/contact', async (req, res) => {
   const { name, email, phone, project_type, budget, message } = req.body;
 
@@ -31,64 +30,57 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ success: false, error: 'Campi obbligatori mancanti.' });
   }
 
-  const emailUser = process.env.EMAIL_USER || 'webdevfabio@gmail.com';
-  const emailPass = process.env.EMAIL_PASS ? process.env.EMAIL_PASS.replace(/\s+/g, '') : null;
+  const resendApiKey = process.env.RESEND_API_KEY;
 
-  if (emailPass) {
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // STARTTLS su porta 587
-      requireTLS: true,
-      auth: {
-        user: emailUser,
-        pass: emailPass
-      },
-      tls: {
-        rejectUnauthorized: false
-      },
-      // Forza l'uso di IPv4 per evitare l'errore ENETUNREACH di Render
-      family: 4
-    });
-
-    const mailOptions = {
-      from: `"WebDevFabio Lead" <${emailUser}>`,
-      to: 'webdevfabio@gmail.com',
-      replyTo: email,
-      subject: `🔥 Nuovo Preventivo: ${project_type} - ${name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
-          <h2 style="color: #06b6d4;">Nuova Richiesta dal Sito WebDevFabio</h2>
-          <hr style="border: 0; border-top: 1px solid #eee;">
-          <p><strong>Nome / Attività:</strong> ${name}</p>
-          <p><strong>Email di contatto:</strong> ${email}</p>
-          <p><strong>Telefono / WhatsApp:</strong> ${phone || 'Non specificato'}</p>
-          <p><strong>Soluzione Richiesta:</strong> ${project_type}</p>
-          <p><strong>Budget Indicativo:</strong> ${budget || 'Non specificato'}</p>
-          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #3b82f6; margin-top: 15px;">
-            <strong>Descrizione del progetto:</strong><br>
-            ${message ? message.replace(/\n/g, '<br>') : 'Nessun messaggio aggiuntivo fornito.'}
-          </div>
-        </div>
-      `
-    };
-
+  if (resendApiKey) {
     try {
-      await transporter.sendMail(mailOptions);
-      console.log('✅ Email inviata con successo per:', email);
-      return res.json({ success: true, message: 'Email inviata con successo!' });
-    } catch (error) {
-      console.error('❌ Errore Nodemailer:', error);
-      return res.status(500).json({ 
-        success: false, 
-        error: 'Errore durante l\'invio. Ti invito a contattarmi via WhatsApp!' 
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'WebDevFabio Lead <onboarding@resend.dev>',
+          to: ['webdevfabio@gmail.com'],
+          reply_to: email,
+          subject: `🔥 Nuovo Preventivo: ${project_type} - ${name}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
+              <h2 style="color: #06b6d4;">Nuova Richiesta dal Sito WebDevFabio</h2>
+              <hr style="border: 0; border-top: 1px solid #eee;">
+              <p><strong>Nome / Attività:</strong> ${name}</p>
+              <p><strong>Email di contatto:</strong> ${email}</p>
+              <p><strong>Telefono / WhatsApp:</strong> ${phone || 'Non specificato'}</p>
+              <p><strong>Soluzione Richiesta:</strong> ${project_type}</p>
+              <p><strong>Budget Indicativo:</strong> ${budget || 'Non specificato'}</p>
+              <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #3b82f6; margin-top: 15px;">
+                <strong>Descrizione del progetto:</strong><br>
+                ${message ? message.replace(/\n/g, '<br>') : 'Nessun messaggio fornito.'}
+              </div>
+            </div>
+          `
+        })
       });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log('✅ Email recapitata con successo via Resend:', result.id);
+        return res.json({ success: true, message: 'Richiesta inviata con successo!' });
+      } else {
+        console.error('❌ Errore Resend API:', result);
+        return res.status(500).json({ success: false, error: 'Errore durante l\'invio. Contattami su WhatsApp!' });
+      }
+    } catch (error) {
+      console.error('❌ Errore fetch Resend:', error);
+      return res.status(500).json({ success: false, error: 'Errore di connessione server.' });
     }
   } else {
-    console.log('\n--- PREVENTIVO RICEVUTO (EMAIL_PASS mancante) ---');
+    console.log('\n--- NUOVO PREVENTIVO RICEVUTO (RESEND_API_KEY non impostata) ---');
     console.log(req.body);
-    console.log('-------------------------------------------------\n');
-    return res.json({ success: true, message: 'Richiesta registrata nei log.' });
+    console.log('--------------------------------------------------------------\n');
+    return res.json({ success: true, message: 'Richiesta registrata nei log del server!' });
   }
 });
 
