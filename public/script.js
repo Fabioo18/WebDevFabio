@@ -1,3 +1,38 @@
+// Inietta automaticamente Favicon e Meta Open Graph su tutte le pagine
+(function injectGlobalHeadTags() {
+  const head = document.head;
+
+  // 1. Favicon
+  if (!document.querySelector("link[rel~='icon']")) {
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.type = 'image/svg+xml';
+    favicon.href = '/favicon.svg';
+    head.appendChild(favicon);
+  }
+
+  // 2. Open Graph Banner Image
+  if (!document.querySelector("meta[property='og:image']")) {
+    const ogImg = document.createElement('meta');
+    ogImg.setAttribute('property', 'og:image');
+    ogImg.content = window.location.origin + '/og-banner.svg';
+    head.appendChild(ogImg);
+
+    const ogImgType = document.createElement('meta');
+    ogImgType.setAttribute('property', 'og:image:type');
+    ogImgType.content = 'image/svg+xml';
+    head.appendChild(ogImgType);
+  }
+
+  // 3. Open Graph Type
+  if (!document.querySelector("meta[property='og:type']")) {
+    const ogType = document.createElement('meta');
+    ogType.setAttribute('property', 'og:type');
+    ogType.content = 'website';
+    head.appendChild(ogType);
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   initBackgroundCanvas();
   initScrollReveal();

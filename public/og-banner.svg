@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Gradienti Principali -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#050811" />
+    </linearGradient>
+
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.05" />
+    </linearGradient>
+
+    <!-- Filtro Glow Neon -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="25" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Sfondo Base -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+
+  <!-- Griglia Digitale Tech -->
+  <g opacity="0.08" stroke="#38bdf8" stroke-width="1">
+    <path d="M0,70 H1200 M0,140 H1200 M0,210 H1200 M0,280 H1200 M0,350 H1200 M0,420 H1200 M0,490 H1200 M0,560 H1200" />
+    <path d="M100,0 V630 M200,0 V630 M300,0 V630 M400,0 V630 M500,0 V630 M600,0 V630 M700,0 V630 M800,0 V630 M900,0 V630 M1000,0 V630 M1100,0 V630" />
+  </g>
+
+  <!-- Sfera Glow di Luce -->
+  <circle cx="280" cy="315" r="160" fill="#06b6d4" opacity="0.12" filter="url(#glow)" />
+  <circle cx="950" cy="315" r="190" fill="#8b5cf6" opacity="0.08" filter="url(#glow)" />
+
+  <!-- LOGO ICONA (Sinistra) -->
+  <g transform="translate(180, 205)">
+    <!-- Rettangolo con Angoli Arrotondati e Bordo Gradiente -->
+    <rect x="0" y="0" width="220" height="220" rx="44" fill="url(#badgeGrad)" stroke="url(#primaryGrad)" stroke-width="3.5" />
+    
+    <!-- Simbolo Codice </> Stilizzato -->
+    <!-- Parentesi Sinistra < -->
+    <path d="M 75 75 L 45 110 L 75 145" fill="none" stroke="#06b6d4" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Slash Centrale / -->
+    <path d="M 125 65 L 95 155" fill="none" stroke="url(#primaryGrad)" stroke-width="10" stroke-linecap="round" />
+    <!-- Parentesi Destra > -->
+    <path d="M 145 75 L 175 110 L 145 145" fill="none" stroke="#3b82f6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Punto Accento Dot -->
+    <circle cx="180" cy="50" r="7" fill="#06b6d4" />
+  </g>
+
+  <!-- TESTI & BRANDING (Destra) -->
+  <!-- Tagline Badge -->
+  <g transform="translate(450, 220)">
+    <rect x="0" y="0" width="240" height="34" rx="17" fill="#06b6d4" fill-opacity="0.15" stroke="#06b6d4" stroke-width="1" />
+    <text x="120" y="22" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" letter-spacing="2" text-anchor="middle">WEB DEVELOPMENT</text>
+  </g>
+
+  <!-- Titolo Brand -->
+  <text x="450" y="325" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="800" letter-spacing="-1">
+    webdev<tspan fill="url(#primaryGrad)">.fabio</tspan>
+  </text>
+
+  <!-- Sottotitolo / Value Proposition -->
+  <text x="450" y="380" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="400">
+    Siti Web ad Alte Prestazioni &amp; Soluzioni Digitali
+  </text>
+
+  <!-- Feature Pills -->
+  <g transform="translate(450, 420)">
+    <text x="0" y="0" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="600">⚡ Zero Canoni Mensili</text>
+    <text x="210" y="0" fill="#64748b" font-family="sans-serif" font-size="16">•</text>
+    <text x="235" y="0" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="600">🚀 Consegna in 7 Giorni</text>
+    <text x="450" y="0" fill="#64748b" font-family="sans-serif" font-size="16">•</text>
+    <text x="475" y="0" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="600">📱 Mobile First</text>
+  </g>
+</svg>
