@@ -23,7 +23,7 @@ app.get('/wedding-website', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'wedding-demo.html'));
 });
 
-// Endpoint API Invio Preventivi via Email
+// Endpoint API Invio Preventivi con forzatura IPv4 per Render
 app.post('/api/contact', async (req, res) => {
   const { name, email, phone, project_type, budget, message } = req.body;
 
@@ -32,16 +32,23 @@ app.post('/api/contact', async (req, res) => {
   }
 
   const emailUser = process.env.EMAIL_USER || 'webdevfabio@gmail.com';
-  const emailPass = process.env.EMAIL_PASS;
+  const emailPass = process.env.EMAIL_PASS ? process.env.EMAIL_PASS.replace(/\s+/g, '') : null;
 
-  // Se la password per le app è configurata, invia l'email reale
   if (emailPass) {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // STARTTLS su porta 587
+      requireTLS: true,
       auth: {
         user: emailUser,
         pass: emailPass
-      }
+      },
+      tls: {
+        rejectUnauthorized: false
+      },
+      // Forza l'uso di IPv4 per evitare l'errore ENETUNREACH di Render
+      family: 4
     });
 
     const mailOptions = {
@@ -68,17 +75,20 @@ app.post('/api/contact', async (req, res) => {
 
     try {
       await transporter.sendMail(mailOptions);
+      console.log('✅ Email inviata con successo per:', email);
       return res.json({ success: true, message: 'Email inviata con successo!' });
     } catch (error) {
-      console.error('Errore invio Nodemailer:', error);
-      return res.status(500).json({ success: false, error: 'Errore durante l\'invio della richiesta.' });
+      console.error('❌ Errore Nodemailer:', error);
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Errore durante l\'invio. Ti invito a contattarmi via WhatsApp!' 
+      });
     }
   } else {
-    // Modalità locale di fallback (senza password env configurata)
-    console.log('\n--- NUOVO PREVENTIVO RICEVUTO (Modalità Console Log) ---');
+    console.log('\n--- PREVENTIVO RICEVUTO (EMAIL_PASS mancante) ---');
     console.log(req.body);
-    console.log('--------------------------------------------------------\n');
-    return res.json({ success: true, message: 'Richiesta registrata in console (aggiungi EMAIL_PASS per l\'invio reale).' });
+    console.log('-------------------------------------------------\n');
+    return res.json({ success: true, message: 'Richiesta registrata nei log.' });
   }
 });
 
