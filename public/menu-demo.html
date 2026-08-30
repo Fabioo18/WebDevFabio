@@ -4,41 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BellaVista Gourmet | Menu Digitale & Ordini</title>
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="menu-demo.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body class="client-view-body">
-
   <!-- Top Demo Banner -->
   <aside class="demo-top-bar">
     <div class="demo-top-content">
-      <span>📱 <strong>Schermata Cliente (Tavolo)</strong> • Supporto Multi-Comanda</span>
+      <span>🍽️ <strong>Schermata Cliente (Tavolo)</strong> · Multi-Comanda</span>
       <div class="demo-top-actions">
-        <a href="kds-demo.html" target="_blank" rel="noopener noreferrer" class="btn-top-kds">Apri Monitor Cassa & KDS ↗</a>
+        <a href="kds-demo.html" target="_blank" rel="noopener noreferrer" class="btn-top-kds">Monitor KDS ↗</a>
         <a href="index.html" class="btn-top-back">← Portfolio</a>
       </div>
     </div>
   </aside>
 
   <div class="app-layout-split">
-    
     <!-- COLONNA SINISTRA: CATALOGO MENU -->
     <div class="menu-catalog-column">
-      
-      <!-- Header Ristorante -->
       <header class="restaurant-header">
         <div class="header-overlay"></div>
         <div class="header-content">
-          <span class="restaurant-tag">Ristorante • Pizzeria • Cocktails</span>
+          <span class="restaurant-tag">Ristorante · Pizzeria · Cocktails</span>
           <h1 class="restaurant-name">BellaVista Gourmet</h1>
-          <p class="restaurant-info">Firenze • Cucina Tradizionale & Pizze Contemporanee</p>
+          <p class="restaurant-info">Firenze · Cucina Tradizionale & Pizze Contemporanee</p>
           
-          <!-- Selezione Numero Tavolo -->
           <div class="table-selector-box">
             <label for="tableNumberSelect">Sei al tavolo:</label>
             <select id="tableNumberSelect">
@@ -50,46 +43,42 @@
               <option value="Asporto / Banco">Asporto / Banco</option>
             </select>
           </div>
-
           <div class="service-actions-bar">
             <button class="btn-service" id="callWaiterBtn">🔔 Chiama Cameriere</button>
+            <button class="btn-service mobile-only-btn" id="openMobileOrdersBtn">📋 Comande Inviate (<span id="mobileSentCount">0</span>)</button>
           </div>
         </div>
       </header>
 
-      <!-- Controlli Sticky: Ricerca e Filtri -->
       <div class="controls-sticky-bar">
         <div class="search-box">
           <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M10 2a8 8 0 0 1 6.32 12.9l5.38 5.38-1.42 1.42-5.38-5.38A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
           <input type="text" id="menuSearchInput" placeholder="Cerca piatto o ingrediente...">
         </div>
-
         <div class="dietary-filter-scroll">
           <button class="diet-chip active" data-diet="all">Tutti</button>
-          <button class="diet-chip" data-diet="daily">⭐ Piatti del Giorno</button>
-          <button class="diet-chip" data-diet="gluten-free">🌾 Senza Glutine</button>
+          <button class="diet-chip" data-diet="daily">⭐ Del Giorno</button>
+          <button class="diet-chip" data-diet="gluten-free">🌾 No Glutine</button>
           <button class="diet-chip" data-diet="veg">🌱 Vegetariano</button>
           <button class="diet-chip" data-diet="vegan">🥑 Vegano</button>
-          <button class="diet-chip" data-diet="lactose-free">🥛 Senza Lattosio</button>
+          <button class="diet-chip" data-diet="lactose-free">🥛 No Lattosio</button>
         </div>
-
         <nav class="category-tabs" id="categoryNav">
           <button class="cat-tab active" data-cat="all">Tutte le Portate</button>
           <button class="cat-tab" data-cat="antipasti">Antipasti</button>
           <button class="cat-tab" data-cat="primi">Primi Piatti</button>
           <button class="cat-tab" data-cat="pizze">Pizze Gourmet</button>
           <button class="cat-tab" data-cat="secondi">Secondi</button>
-          <button class="cat-tab" data-cat="drink">Cocktails & Drink</button>
+          <button class="cat-tab" data-cat="drink">Cocktails</button>
           <button class="cat-tab" data-cat="dolci">Dessert</button>
         </nav>
       </div>
 
-      <!-- Feed Piatti -->
       <main class="menu-feed" id="menuItemsContainer"></main>
 
       <footer class="menu-footer">
         <div class="allergens-legend">
-          <strong>Informativa Allergeni:</strong> Ai sensi del Reg. UE 1169/2011 comunicare al personale eventuali allergie gravi.
+          <strong>Informativa Allergeni:</strong> Ai sensi del Reg. UE 1169/2011 comunicare al personale eventuali allergie.
         </div>
         <div class="powered-badge">
           <span>Powered by</span>
@@ -98,29 +87,30 @@
       </footer>
     </div>
 
-    <!-- COLONNA DESTRA: PANNELLO ORDINI (ATTUALE & STORICO INVIATI) -->
+    <!-- COLONNA DESTRA / DRAWER PER MOBILE -->
     <aside class="orders-sidebar-column" id="ordersSidebar">
-      
-      <!-- SEZIONE 1: NUOVA COMANDA IN COSTRUZIONE -->
+      <div class="sidebar-header-mobile">
+        <h3>Riepilogo Ordine</h3>
+        <button class="close-sidebar-mobile-btn" id="closeMobileSidebarBtn">&times;</button>
+      </div>
+
+      <!-- SEZIONE 1: NUOVA COMANDA -->
       <div class="sidebar-section active-cart-section">
         <div class="sidebar-sec-head">
           <h3>🛒 Nuova Comanda</h3>
           <span class="active-badge" id="currentCartCount">0 piatti</span>
         </div>
-
         <div class="cart-items-scroll" id="sidebarCartItems">
-          <div class="empty-cart-msg">Seleziona i piatti dal menu a sinistra per comporre l'ordine.</div>
+          <div class="empty-cart-msg">Seleziona i piatti dal menu per comporre l'ordine.</div>
         </div>
-
         <div class="order-notes-group" style="margin-top: 10px;">
-          <label for="orderNotes">Note per la cucina / bar:</label>
-          <textarea id="orderNotes" rows="2" placeholder="Es. Senza ghiaccio nel drink, bistecca ben cotta..."></textarea>
+          <label for="orderNotes">Note per la cucina:</label>
+          <textarea id="orderNotes" rows="2" placeholder="Es. Cottura media, senza ghiaccio..."></textarea>
         </div>
-
         <div class="sidebar-cart-footer">
           <div class="subtotal-row">
-            <span>Subtotale Nuova Comanda:</span>
-            <strong id="sidebarSubtotal">€0.00</strong>
+            <span>Subtotale Comanda:</span>
+            <strong id="sidebarSubtotal">€ 0.00</strong>
           </div>
           <button class="btn-direct-order" id="sendOrderDirectBtn" disabled>
             ⚡ Invia Comanda in Cucina
@@ -128,33 +118,43 @@
         </div>
       </div>
 
-      <!-- SEZIONE 2: STORICO COMANDE GIÀ INVIATE DAL TAVOLO -->
-      <div class="sidebar-section sent-orders-section">
+      <!-- SEZIONE 2: STORICO COMANDE -->
+      <div class="sidebar-section sent-orders-section" id="sentOrdersSectionBox">
         <div class="sidebar-sec-head">
-          <h3>📋 Comande Inviate al Tavolo</h3>
+          <h3>🧾 Comande Inviate</h3>
           <span class="count-pill" id="sentOrdersCount">0</span>
         </div>
-
         <div class="sent-orders-scroll" id="sidebarSentOrdersList">
           <div class="empty-cart-msg">Nessuna comanda ancora inviata per questo tavolo.</div>
         </div>
-
         <div class="sent-total-banner" id="sentOrdersTotalBanner" style="display: none;">
           <div class="bill-total-row">
-            <span>Totale Complessivo Conto:</span>
-            <strong id="sentOrdersGrandTotal">€0.00</strong>
+            <span>Totale Conto Tavolo:</span>
+            <strong id="sentOrdersGrandTotal">€ 0.00</strong>
           </div>
           <button class="btn-ask-bill-action" id="requestTableBillBtn">
-            🧾 Richiedi il Conto alla Cassa
+            💳 Richiedi il Conto alla Cassa
           </button>
         </div>
       </div>
-
     </aside>
-
   </div>
 
-  <!-- Toast Notifiche di Sistema -->
+  <!-- STICKY FLOATING CART BAR (Solo Mobile) -->
+  <div class="mobile-floating-cart-bar" id="mobileFloatingCartBar">
+    <div class="floating-cart-info">
+      <span class="floating-badge-qty" id="floatingCartQty">0</span>
+      <div class="floating-cart-text">
+        <strong>Carrello Comanda</strong>
+        <span id="floatingCartTotal">€ 0.00</span>
+      </div>
+    </div>
+    <button class="btn-open-cart-floating" id="openMobileCartBtn">
+      Vedi Ordine ➔
+    </button>
+  </div>
+
+  <div class="modal-backdrop-mobile" id="mobileDrawerBackdrop"></div>
   <div class="menu-toast" id="menuToast">Notifica</div>
 
   <script src="menu-shared.js"></script>

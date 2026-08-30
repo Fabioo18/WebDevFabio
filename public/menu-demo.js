@@ -1,13 +1,12 @@
 /**
  * ============================================================================
- * MENU-DEMO.JS - CLIENTE: CARRELLO A DESTRA & SOCKET.IO REAL-TIME
+ * MENU-DEMO.JS - CLIENTE: CARRELLO A DESTRA, STICKY BAR MOBILE & SOCKET.IO
  * ============================================================================
  */
 
 let menuData = getMenuData();
 let cart = JSON.parse(localStorage.getItem('menu_cart_storage')) || [];
 let mySentOrderIds = JSON.parse(localStorage.getItem('my_sent_order_ids')) || [];
-
 let activeCategory = 'all';
 let activeDietFilter = 'all';
 let searchQuery = '';
@@ -30,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSidebarCart();
   renderSentOrdersList();
   initSocketListeners();
+  initMobileDrawer();
 });
 
 /* ==========================================================================
@@ -40,22 +40,19 @@ function initSocketListeners() {
     if (mySentOrderIds.includes(data.orderId)) {
       playBeepSound('alert');
       
-      // Aggiorna lo stato locale dell'ordine
       const orders = getOrders();
       const order = orders.find(o => o.id === data.orderId);
       if (order) {
         order.status = data.newStatus;
         saveOrders(orders);
       }
-
       renderSentOrdersList();
 
       let message = `Comanda #${data.orderId}: `;
       if (data.newStatus === 'preparing') message += '👨‍🍳 I cuochi hanno iniziato la preparazione!';
-      if (data.newStatus === 'ready') message += '🍽️ PRONTA AL PASS! Il cameriere sta servendo i piatti.';
-      if (data.newStatus === 'billing') message += '🧾 Richiesta conto ricevuta dalla cassa.';
-      if (data.newStatus === 'completed') message += '💶 Conto saldato con successo. Grazie!';
-
+      if (data.newStatus === 'ready') message += '🔔 PRONTA AL PASS! Il cameriere sta servendo i piatti.';
+      if (data.newStatus === 'billing') message += '💳 Richiesta conto ricevuta dalla cassa.';
+      if (data.newStatus === 'completed') message += '✅ Conto saldato con successo. Grazie!';
       showToast(message);
     }
   });
@@ -64,7 +61,7 @@ function initSocketListeners() {
     menuData = newMenu;
     saveMenuData(menuData);
     renderMenuFeed();
-    showToast('📋 Menu aggiornato in tempo reale.');
+    showToast('✨ Menu aggiornato in tempo reale.');
   });
 
   socket.on('shift_reset', () => {
@@ -75,7 +72,7 @@ function initSocketListeners() {
     saveOrders([]);
     renderSidebarCart();
     renderSentOrdersList();
-    showToast('🌙 Il turno del ristorante si è concluso. Tavolo resettato!');
+    showToast('🔄 Il turno del ristorante si è concluso. Tavolo resettato!');
   });
 }
 
@@ -100,7 +97,7 @@ function renderMenuFeed() {
     const matchCat = activeCategory === 'all' || item.category === activeCategory;
     const matchDiet = activeDietFilter === 'all' 
       || (activeDietFilter === 'daily' && item.isDaily) 
-      || (activeDietFilter !== 'daily' && item.tags.includes(activeDietFilter));
+      || (activeDietFilter !== 'daily' && item.tags && item.tags.includes(activeDietFilter));
     const matchSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) 
       || item.desc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchCat && matchDiet && matchSearch;
@@ -139,7 +136,7 @@ function renderMenuFeed() {
           <div>
             <div class="dish-title-row">
               <span class="dish-name">${dish.name}</span>
-              <span class="dish-price">€${Number(dish.price).toFixed(2)}</span>
+              <span class="dish-price">€ ${Number(dish.price).toFixed(2)}</span>
             </div>
             <p class="dish-desc">${dish.desc}</p>
             <div class="dish-badges-row">${badgesHtml}</div>
@@ -157,10 +154,13 @@ function renderMenuFeed() {
 }
 
 function initFilters() {
-  document.getElementById('menuSearchInput').addEventListener('input', (e) => {
-    searchQuery = e.target.value.trim();
-    renderMenuFeed();
-  });
+  const searchInput = document.getElementById('menuSearchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      renderMenuFeed();
+    });
+  }
 
   document.querySelectorAll('.diet-chip').forEach(chip => {
     chip.addEventListener('click', () => {
@@ -194,37 +194,58 @@ window.addToCart = function(dishId) {
 
   localStorage.setItem('menu_cart_storage', JSON.stringify(cart));
   renderSidebarCart();
+  showToast(`Aggiunto: ${dish.name}`);
 };
 
+/* ==========================================================================
+   3. GESTIONE CARRELLO DESKTOP E BARRA MOBILE
+   ========================================================================== */
 function renderSidebarCart() {
   const container = document.getElementById('sidebarCartItems');
   const subtotalEl = document.getElementById('sidebarSubtotal');
   const countBadge = document.getElementById('currentCartCount');
   const sendBtn = document.getElementById('sendOrderDirectBtn');
+  
+  // Elementi Barra Sticky Mobile
+  const floatingBar = document.getElementById('mobileFloatingCartBar');
+  const floatingQty = document.getElementById('floatingCartQty');
+  const floatingTotal = document.getElementById('floatingCartTotal');
+
   if (!container) return;
 
   const totalQty = cart.reduce((s, i) => s + i.qty, 0);
   const totalPrice = cart.reduce((s, i) => s + (Number(i.price) * i.qty), 0);
 
-  countBadge.innerText = `${totalQty} piatti`;
-  subtotalEl.innerText = `€${totalPrice.toFixed(2)}`;
+  if (countBadge) countBadge.innerText = `${totalQty} piatti`;
+  if (subtotalEl) subtotalEl.innerText = `€ ${totalPrice.toFixed(2)}`;
+
+  if (floatingQty) floatingQty.innerText = totalQty;
+  if (floatingTotal) floatingTotal.innerText = `€ ${totalPrice.toFixed(2)}`;
+
+  // Gestione classe di visibilità per la barra mobile
+  if (floatingBar) {
+    if (totalQty > 0) {
+      floatingBar.classList.add('bar-visible');
+    } else {
+      floatingBar.classList.remove('bar-visible');
+    }
+  }
 
   if (cart.length === 0) {
-    container.innerHTML = `<div class="empty-cart-msg">Seleziona i piatti dal menu a sinistra per comporre l'ordine.</div>`;
-    sendBtn.disabled = true;
+    container.innerHTML = `<div class="empty-cart-msg">Seleziona i piatti dal menu per comporre l'ordine.</div>`;
+    if (sendBtn) sendBtn.disabled = true;
     return;
   }
 
-  sendBtn.disabled = false;
+  if (sendBtn) sendBtn.disabled = false;
   container.innerHTML = '';
-
   cart.forEach(item => {
     const row = document.createElement('div');
     row.className = 'sidebar-cart-item';
     row.innerHTML = `
       <div style="flex: 1;">
         <div style="font-weight: 700; font-size: 0.86rem; color: #fff;">${item.name}</div>
-        <div style="font-size: 0.76rem; color: var(--accent-gold); font-family: var(--font-mono);">€${(Number(item.price) * item.qty).toFixed(2)}</div>
+        <div style="font-size: 0.76rem; color: var(--accent-gold); font-family: var(--font-mono);">€ ${(Number(item.price) * item.qty).toFixed(2)}</div>
       </div>
       <div class="cart-qty-ctrl">
         <button class="btn-qty" onclick="changeSidebarQty(${item.id}, -1)">-</button>
@@ -246,6 +267,9 @@ window.changeSidebarQty = function(id, delta) {
   }
 };
 
+/* ==========================================================================
+   4. INVIO COMANDA & AZIONI TAVOLO
+   ========================================================================== */
 function initOrderActions() {
   const sendBtn = document.getElementById('sendOrderDirectBtn');
   const requestBillBtn = document.getElementById('requestTableBillBtn');
@@ -258,7 +282,6 @@ function initOrderActions() {
       const notes = document.getElementById('orderNotes').value.trim();
       const totalPrice = cart.reduce((s, i) => s + (Number(i.price) * i.qty), 0);
       const newOrderId = Math.floor(100 + Math.random() * 900);
-
       const now = new Date();
       const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
@@ -272,13 +295,10 @@ function initOrderActions() {
         total: totalPrice
       };
 
-      // Inviamo al server. Sarà il server a distribuirlo correttamente a KDS e client.
       socket.emit('new_order', newOrder);
-
       mySentOrderIds.unshift(newOrderId);
       localStorage.setItem('my_sent_order_ids', JSON.stringify(mySentOrderIds));
 
-      // Svuotiamo il carrello di creazione
       cart = [];
       localStorage.setItem('menu_cart_storage', JSON.stringify(cart));
       document.getElementById('orderNotes').value = '';
@@ -286,7 +306,13 @@ function initOrderActions() {
       renderSidebarCart();
       renderSentOrdersList();
       playBeepSound('notification');
-      showToast(`⚡ Comanda #${newOrderId} inviata in cucina con successo!`);
+      showToast(`⚡ Comanda #${newOrderId} inviata in cucina!`);
+
+      // Chiude il drawer mobile
+      const sidebar = document.getElementById('ordersSidebar');
+      const backdrop = document.getElementById('mobileDrawerBackdrop');
+      if (sidebar) sidebar.classList.remove('drawer-open');
+      if (backdrop) backdrop.classList.remove('active');
     });
   }
 
@@ -307,7 +333,7 @@ function initOrderActions() {
         saveOrders(orders);
         renderSentOrdersList();
         playBeepSound('notification');
-        showToast('🧾 Richiesta conto inviata alla cassa!');
+        showToast('💳 Richiesta conto inviata alla cassa!');
       }
     });
   }
@@ -316,29 +342,30 @@ function initOrderActions() {
 function renderSentOrdersList() {
   const container = document.getElementById('sidebarSentOrdersList');
   const countPill = document.getElementById('sentOrdersCount');
+  const mobileSentCount = document.getElementById('mobileSentCount');
   const banner = document.getElementById('sentOrdersTotalBanner');
   const grandTotalEl = document.getElementById('sentOrdersGrandTotal');
-  const myTable = document.getElementById('tableNumberSelect').value;
+  const myTable = document.getElementById('tableNumberSelect')?.value || '';
 
   if (!container) return;
 
   const allOrders = getOrders();
   const myOrders = allOrders.filter(o => o.table === myTable);
 
-  countPill.innerText = myOrders.length;
+  if (countPill) countPill.innerText = myOrders.length;
+  if (mobileSentCount) mobileSentCount.innerText = myOrders.length;
 
   if (myOrders.length === 0) {
-    container.innerHTML = `<div class="empty-cart-msg">Nessuna comanda inviata per questo tavolo.</div>`;
+    container.innerHTML = `<div class="empty-cart-msg">Nessuna comanda ancora inviata per questo tavolo.</div>`;
     if (banner) banner.style.display = 'none';
     return;
   }
 
   if (banner) banner.style.display = 'block';
   const grandTotal = myOrders.reduce((s, o) => s + Number(o.total), 0);
-  grandTotalEl.innerText = `€${grandTotal.toFixed(2)}`;
+  if (grandTotalEl) grandTotalEl.innerText = `€ ${grandTotal.toFixed(2)}`;
 
   container.innerHTML = '';
-
   myOrders.forEach(order => {
     const card = document.createElement('div');
     card.className = `sent-order-card status-${order.status}`;
@@ -346,9 +373,9 @@ function renderSentOrdersList() {
     let statusLabel = 'In Attesa ⏳';
     let statusClass = 'tag-pending';
     if (order.status === 'preparing') { statusLabel = 'In Preparazione 👨‍🍳'; statusClass = 'tag-prep'; }
-    if (order.status === 'ready') { statusLabel = 'Pronto al Pass 🍽️'; statusClass = 'tag-ready'; }
-    if (order.status === 'billing') { statusLabel = 'Conto Richiesto 🧾'; statusClass = 'tag-billing'; }
-    if (order.status === 'completed') { statusLabel = 'Saldato ✔️'; statusClass = 'tag-done'; }
+    if (order.status === 'ready') { statusLabel = 'Pronto al Pass 🔔'; statusClass = 'tag-ready'; }
+    if (order.status === 'billing') { statusLabel = 'Conto Richiesto 💳'; statusClass = 'tag-billing'; }
+    if (order.status === 'completed') { statusLabel = 'Saldato ✅'; statusClass = 'tag-done'; }
 
     const itemsSummary = order.items.map(it => `• ${it.qty}x ${it.name}`).join('<br>');
 
@@ -363,7 +390,7 @@ function renderSentOrdersList() {
       <div class="sent-order-dishes">${itemsSummary}</div>
       <div class="sent-order-foot">
         <span>Totale:</span>
-        <strong style="color:var(--accent-gold); font-family:var(--font-mono);">€${Number(order.total).toFixed(2)}</strong>
+        <strong style="color:var(--accent-gold); font-family:var(--font-mono);">€ ${Number(order.total).toFixed(2)}</strong>
       </div>
     `;
     container.appendChild(card);
@@ -371,9 +398,12 @@ function renderSentOrdersList() {
 }
 
 function initTableSelector() {
-  document.getElementById('tableNumberSelect').addEventListener('change', () => {
-    renderSentOrdersList();
-  });
+  const select = document.getElementById('tableNumberSelect');
+  if (select) {
+    select.addEventListener('change', () => {
+      renderSentOrdersList();
+    });
+  }
 }
 
 function initServiceButtons() {
@@ -383,6 +413,43 @@ function initServiceButtons() {
       const table = document.getElementById('tableNumberSelect').value;
       socket.emit('call_waiter', { table });
       alert(`🔔 Cameriere notificato per ${table}! Un addetto sta arrivando.`);
+    };
+  }
+}
+
+/* ==========================================================================
+   5. GESTIONE DRAWER CASSETTO MOBILE
+   ========================================================================== */
+function initMobileDrawer() {
+  const sidebar = document.getElementById('ordersSidebar');
+  const backdrop = document.getElementById('mobileDrawerBackdrop');
+  const openCartBtn = document.getElementById('openMobileCartBtn');
+  const closeCartBtn = document.getElementById('closeMobileSidebarBtn');
+  const openSentBtn = document.getElementById('openMobileOrdersBtn');
+
+  function openDrawer() {
+    if (sidebar && backdrop) {
+      sidebar.classList.add('drawer-open');
+      backdrop.classList.add('active');
+    }
+  }
+
+  function closeDrawer() {
+    if (sidebar && backdrop) {
+      sidebar.classList.remove('drawer-open');
+      backdrop.classList.remove('active');
+    }
+  }
+
+  if (openCartBtn) openCartBtn.onclick = openDrawer;
+  if (closeCartBtn) closeCartBtn.onclick = closeDrawer;
+  if (backdrop) backdrop.onclick = closeDrawer;
+  
+  if (openSentBtn) {
+    openSentBtn.onclick = () => {
+      openDrawer();
+      const sentBox = document.getElementById('sentOrdersSectionBox');
+      if (sentBox) sentBox.scrollIntoView({ behavior: 'smooth' });
     };
   }
 }
