@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Consulting | Studio Professionale & Azienda</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="studio-demo.css">
+</head>
+<body>
+
+  <!-- Top Demo Bar -->
+  <aside class="demo-alert-bar">
+    <div class="alert-content">
+      <div class="alert-tag">
+        <span class="pulse-gold"></span>
+        <span><strong>Demo Sito Vetrina Aziendale</strong> · Soluzione per Professionisti & Aziende</span>
+      </div>
+      <div class="alert-actions">
+        <a href="index.html" class="btn-top-back">← Portfolio</a>
+        <a href="https://wa.me/393273965395?text=Ciao%20Fabio,%20vorrei%20informazioni%20per%20un%20Sito%20Vetrina%20Aziendale." target="_blank" rel="noopener noreferrer" class="btn-top-order">Richiedi Struttura ↗</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Navbar / Header Istituzionale -->
+  <header class="corporate-nav">
+    <div class="nav-inner">
+      <div class="brand-logo">AURA <span>CONSULTING</span></div>
+      <nav class="nav-links">
+        <a href="#servizi">Aree di Attività</a>
+        <a href="#studio">Lo Studio</a>
+        <a href="#contatti" class="btn-nav-cta">Contatta lo Studio</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section Editoriale -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <span class="luxury-kicker">Consulenza Strategica & Legale d'Impresa</span>
+      <h1>Eccellenza e visione per la crescita del <em>tuo business</em>.</h1>
+      <p class="hero-sub">Affianchiamo aziende, studi professionali e imprenditori con soluzioni su misura in ambito societario, fiscale e di sviluppo strategico.</p>
+      <div class="hero-cta-group">
+        <a href="#contatti" class="btn-editorial primary">Richiedi una Consulenza</a>
+        <a href="#servizi" class="btn-editorial">Esplora i Servizi ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sezione Aree di Attività (Servizi) -->
+  <section id="servizi" class="section-padded">
+    <div class="content-container">
+      <div class="section-title-wrap">
+        <span class="luxury-kicker">Competenze Chiave</span>
+        <h2>Aree di <em>Attività</em></h2>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">⚖️</div>
+          <h3>Diritto Societario & M&A</h3>
+          <p>Assistenza continuativa nella governance aziendale, operazioni straordinarie, fusioni, acquisizioni e contrattualistica d'impresa.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📊</div>
+          <h3>Fiscalità & Tax Advisory</h3>
+          <p>Pianificazione fiscale nazionale e internazionale, due diligence contabile, contenzioso tributario e bilancio d'esercizio.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">💡</div>
+          <h3>Strategia & Innovazione</h3>
+          <p>Temporary management, piani di ristrutturazione aziendale, accesso a bandi di finanza agevolata e digitalizzazione dei processi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sezione Interattiva: Preventivo / Richiesta Contatto Rapido -->
+  <section id="contatti" class="section-padded bg-secondary">
+    <div class="content-container-narrow">
+      <div class="section-title-wrap text-center">
+        <span class="luxury-kicker">Contatto Diretto</span>
+        <h2>Richiedi un <em>Parere Preliminare</em></h2>
+        <p class="header-sub">Compila il modulo sottostante per essere ricontattato da un nostro senior partner entro 24 ore lavorative.</p>
+      </div>
+
+      <form class="corporate-form" id="consultationForm">
+        <div class="form-row">
+          <div class="modal-form-group">
+            <label>Nome e Cognome / Azienda *</label>
+            <input type="text" id="cName" required placeholder="Es. Mario Rossi (Rossi Srl)">
+          </div>
+          <div class="modal-form-group">
+            <label>Indirizzo Email *</label>
+            <input type="email" id="cEmail" required placeholder="mario.rossi@azienda.it">
+          </div>
+        </div>
+
+        <div class="modal-form-group">
+            <label>Area di Interesse</label>
+            <select id="cArea">
+              <option value="Societario">Diritto Societario & M&A</option>
+              <option value="Fiscale">Fiscalità & Tax Advisory</option>
+              <option value="Strategia">Strategia & Finanza Agevolata</option>
+              <option value="Altro">Altra Consulenza</option>
+            </select>
+        </div>
+
+        <div class="modal-form-group">
+          <label>Descrizione della Richiesta *</label>
+          <textarea id="cMessage" rows="4" required placeholder="Fornisci brevi dettagli sulle esigenze del tuo studio o della tua azienda..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-editorial primary full-width" style="margin-top: 10px;">Invia Richiesta Riservata</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer Istituzionale -->
+  <footer class="corporate-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <strong>Aura Consulting & Partners</strong>
+        <p>Via Tornabuoni 14, 50123 Firenze (FI)</p>
+        <p>P.IVA 06789120482 · Tel. +39 055 284910</p>
+      </div>
+      <div class="footer-col text-right">
+        <p class="powered-text">Sito Vetrina Professionale sviluppato da <a href="index.html">webdev.fabio</a></p>
+        <p class="hub-copy">© 2026 • Tutti i diritti riservati</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notifica -->
+  <div class="toast" id="studioToast">Richiesta inviata con successo!</div>
+
+  <script src="studio-demo.js"></script>
+</body>
+</html>
