@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,7 @@
         <span><strong>Modalità Demo Attiva</strong> · Dati salvati in locale</span>
       </div>
       <div class="alert-actions">
+        <button class="btn-top-theme" id="themeToggleBtn" title="Cambia Tema">✨ Tema Scuro</button>
         <button class="btn-top-reset" id="resetDataBtn" title="Ripristina dati iniziali">Ripristina Demo</button>
         <a href="index.html" class="btn-top-back">← Portfolio</a>
         <a href="https://wa.me/393273965395?text=Ciao%20Fabio,%20vorrei%20informazioni%20per%20un%20Wedding%20Website%20e%20Gestionale." target="_blank" rel="noopener noreferrer" class="btn-top-order">Richiedi Gestionale ↗</a>
@@ -113,7 +114,7 @@
 
         <a href="#qrcode" class="nav-link" data-tab="qrcode">
           <span class="nav-icon">🏷️</span>
-          <span class="nav-title">QR Segnaposto</span>
+          <span class="nav-title">QR Code Evento</span>
         </a>
 
         <a href="#utenti" class="nav-link" data-tab="utenti">
@@ -288,7 +289,6 @@
           </details>
         </div>
 
-        <!-- PROGRESS STATS -->
         <div class="progress-container-box">
           <div class="progress-label">
             Ospiti posizionati ai tavoli: <strong id="assignedCountText">0 / 0</strong>
@@ -298,7 +298,6 @@
           </div>
         </div>
 
-        <!-- SEZIONE MAPPA LOCATION INTERATTIVA -->
         <div class="map-interactive-wrapper">
           <div class="map-toolbar-top">
             <div class="map-title-group">
@@ -314,14 +313,12 @@
             </div>
           </div>
 
-          <!-- Area Mappa con Hotspot Cliccabili & Draggabili -->
           <div class="floorplan-stage" id="floorplanStage">
             <img id="floorplanImage" src="" alt="Planimetria 2D Location">
             <div class="floorplan-overlay-pins" id="floorplanPinsLayer"></div>
           </div>
         </div>
 
-        <!-- BARRA CREAZIONE TAVOLO -->
         <div class="create-table-bar">
           <input type="text" id="newTableNameInput" placeholder="Nome del nuovo tavolo (es. Tavolo Sposi, Magnolia, Champagne)...">
           <button type="button" class="btn-luxury-primary" id="addTableBtn">
@@ -593,18 +590,50 @@
         </div>
       </section>
 
-      <!-- 11. QR CODE -->
+      <!-- 11. QR CODE UNIFICATO & SEGNAPOSTO -->
       <section id="view-qrcode" class="tab-pane">
         <div class="view-header-flex">
           <div>
-            <span class="luxury-kicker">Segnaposto Digitali</span>
-            <h1>QR Code per i Tavoli</h1>
-            <p class="header-sub">Cartellini stampabili con layout elegante per accesso al menu e caricamento foto.</p>
+            <span class="luxury-kicker">Accesso Digitale & Stampa</span>
+            <h1>QR Code Ufficiale Nozze</h1>
+            <p class="header-sub">Un unico codice per consentire a tutti gli invitati di accedere al menu, alla scaletta e alla galleria fotografica condivisa[cite: 3].</p>
           </div>
-          <button class="btn-luxury-primary" onclick="window.print()">🖨️ Stampa Segnaposto</button>
+          <button class="btn-luxury-primary" onclick="window.print()">🖨️ Stampa Tutti i Segnaposto</button>
         </div>
 
-        <div class="qr-printable-grid" id="qrCardsContainer"></div>
+        <div class="info-card">
+          <p>
+            Il <strong>QR Code dell'evento</strong> è universale per tutte le nozze: inquadrandolo, ogni invitato visualizza il portale con il menu nuziale, il programma della giornata e lo spazio per caricare foto live dal proprio smartphone.
+          </p>
+        </div>
+
+        <!-- Master QR Card + Generatore Segnaposto -->
+        <div class="qr-master-layout">
+          <!-- Colonna Sinistra: QR Ufficiale per Partecipazioni/Bomboniere -->
+          <div class="qr-master-box">
+            <span class="badge-mini">Codice Unico Evento</span>
+            <h3>Paolo &amp; Francesca</h3>
+            <p>24 Settembre 2026 · Villa Rosa</p>
+            <div class="qr-master-render">
+              <div class="qr-mock-img-large">QR EVENTO</div>
+            </div>
+            <span class="qr-url-text">https://wedding.fabio/paolo-e-francesca</span>
+            <div class="qr-master-actions">
+              <button class="btn-luxury-outline full-width" onclick="alert('Download QR Code in formato vettoriale SVG ad alta risoluzione completato!');">
+                📥 Scarica QR per Tipografia (SVG)
+              </button>
+            </div>
+          </div>
+
+          <!-- Colonna Destra: Anteprima Cavalieri Segnaposto -->
+          <div class="qr-placeholders-panel">
+            <div class="panel-card-head">
+              <h3>Anteprima Segnaposto da Tavolo</h3>
+              <span style="font-size:0.75rem; color:var(--text-muted);">Generati in automatico per ogni tavolo</span>
+            </div>
+            <div class="qr-printable-grid" id="qrCardsContainer"></div>
+          </div>
+        </div>
       </section>
 
     </main>

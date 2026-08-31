@@ -1,23 +1,22 @@
 /**
  * ============================================================================
- * WEDDING MANAGER PRO - REACTIVE LUXURY CONTROLLER (MAPPA LOCATION 2D & NOTE)
+ * WEDDING MANAGER PRO - REACTIVE LUXURY CONTROLLER (LIGHT THEME & THEME SWITCH)
  * ============================================================================
  */
 
-// Planimetria 2D Zenitale (Vista dall'alto)
 const DEFAULT_FLOORPLAN_IMG = 'assets/planimetria-ristorante.png';
 
 const DEFAULT_STATE = {
   allocatedBudget: 40000.0,
   floorplanImage: DEFAULT_FLOORPLAN_IMG,
+  theme: 'light', // Default in tema chiaro Blush & Champagne
 
-  // Tavoli disposti direttamente sopra i tavoli della nuova piantina
   tables: [
     {
       id: 't-rosa',
       name: 'Tavolo 01 - Rosa',
       collapsed: false,
-      pin: { x: 30, y: 35 }, // Tavolo rotondo centrale sinistro
+      pin: { x: 30, y: 35 },
       guests: [
         { id: 1, name: 'Sofia Marino', role: 'Testimoni', badgeClass: 'badge-testimoni', diet: 'Onnivoro', allergies: 'Lattosio, Crostacei', partner: 'Onnivoro', seats: 2 },
         { id: 2, name: 'Valentina Ricci', role: 'Testimoni', badgeClass: 'badge-testimoni', diet: 'Vegetariano', allergies: '', partner: '', seats: 1 },
@@ -29,7 +28,7 @@ const DEFAULT_STATE = {
       id: 't-girasole',
       name: 'Tavolo 02 - Girasole',
       collapsed: false,
-      pin: { x: 61, y: 35 }, // Tavolo rotondo centrale destro
+      pin: { x: 61, y: 35 },
       guests: [
         { id: 5, name: 'Maria Bianchi', role: 'Familiari sposa', badgeClass: 'badge-famiglia', diet: 'Onnivoro', allergies: '', partner: 'Onnivoro', seats: 2 },
         { id: 6, name: 'Lucia Bianchi', role: 'Familiari sposa', badgeClass: 'badge-famiglia', diet: 'Onnivoro', allergies: 'Crostacei', partner: '(Figlio/a) Menù bimbi, Seggiolone', seats: 3 },
@@ -41,7 +40,7 @@ const DEFAULT_STATE = {
       id: 't-tulipano',
       name: 'Tavolo 03 - Tulipano',
       collapsed: false,
-      pin: { x: 10, y: 39 }, // Saletta privata ovale sinistra
+      pin: { x: 10, y: 39 },
       guests: [
         { id: 9, name: 'Teresa Romano', role: 'Familiari sposa', badgeClass: 'badge-famiglia', diet: 'Onnivoro', allergies: '', partner: 'Onnivoro', seats: 2 },
         { id: 10, name: 'Elena Bianchi', role: 'Familiari sposa', badgeClass: 'badge-famiglia', diet: 'Onnivoro', allergies: '', partner: '', seats: 1 },
@@ -51,7 +50,6 @@ const DEFAULT_STATE = {
     }
   ],
 
-  // Note Categorizzate
   notesList: [
     {
       id: 1,
@@ -96,12 +94,12 @@ const DEFAULT_STATE = {
   ],
 
   expenses: [
-    { id: 1, vendor: 'Catering Villa Rosa', category: 'Catering e Ricevimento', quote: 17500.0, paid: 15000.0, color: '#34d399' },
-    { id: 2, vendor: 'Tenuta Storica Fiesole', category: 'Location', quote: 6500.0, paid: 6500.0, color: '#d4af37' },
-    { id: 3, vendor: 'Photo & Video Art', category: 'Fotografia', quote: 3800.0, paid: 2800.0, color: '#818cf8' },
-    { id: 4, vendor: 'Atelier Sartoria', category: 'Abiti e Accessori', quote: 3200.0, paid: 2500.0, color: '#f59e0b' },
-    { id: 5, vendor: 'Live Band & DJ Set', category: 'Musica e Intrattenimento', quote: 2000.0, paid: 1500.0, color: '#a78bfa' },
-    { id: 6, vendor: 'Floral Designer', category: 'Fiori e Decorazioni', quote: 1850.0, paid: 1167.0, color: '#c97587' }
+    { id: 1, vendor: 'Catering Villa Rosa', category: 'Catering e Ricevimento', quote: 17500.0, paid: 15000.0, color: '#2e8b57' },
+    { id: 2, vendor: 'Tenuta Storica Fiesole', category: 'Location', quote: 6500.0, paid: 6500.0, color: '#b8860b' },
+    { id: 3, vendor: 'Photo & Video Art', category: 'Fotografia', quote: 3800.0, paid: 2800.0, color: '#6366f1' },
+    { id: 4, vendor: 'Atelier Sartoria', category: 'Abiti e Accessori', quote: 3200.0, paid: 2500.0, color: '#d97706' },
+    { id: 5, vendor: 'Live Band & DJ Set', category: 'Musica e Intrattenimento', quote: 2000.0, paid: 1500.0, color: '#8b5cf6' },
+    { id: 6, vendor: 'Floral Designer', category: 'Fiori e Decorazioni', quote: 1850.0, paid: 1167.0, color: '#c2788b' }
   ],
 
   todos: [
@@ -167,6 +165,7 @@ function persistState() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   initTabNavigation();
   initMobileNav();
   initModals();
@@ -179,6 +178,32 @@ document.addEventListener('DOMContentLoaded', () => {
   initResetHandler();
   recalculateAndRenderAll();
 });
+
+/* ==========================================================================
+   GESTIONE TEMA (LIGHT / DARK SWITCH)
+   ========================================================================== */
+function initTheme() {
+  const btn = document.getElementById('themeToggleBtn');
+  const htmlEl = document.documentElement;
+
+  if (!appState.theme) appState.theme = 'light';
+  htmlEl.setAttribute('data-theme', appState.theme);
+  updateThemeButtonText(btn, appState.theme);
+
+  if (btn) {
+    btn.addEventListener('click', () => {
+      appState.theme = appState.theme === 'light' ? 'dark' : 'light';
+      htmlEl.setAttribute('data-theme', appState.theme);
+      updateThemeButtonText(btn, appState.theme);
+      persistState();
+    });
+  }
+}
+
+function updateThemeButtonText(btn, theme) {
+  if (!btn) return;
+  btn.innerText = theme === 'light' ? '🌙 Tema Scuro' : '☀️ Tema Chiaro';
+}
 
 /* ==========================================================================
    1. NAVIGAZIONE TAB & MOBILE TOGGLE
@@ -381,7 +406,7 @@ function initInteractiveMap() {
 
   if (resetMapBtn) {
     resetMapBtn.addEventListener('click', () => {
-      if (confirm('Ripristinare la planimetria 2D predefinita?')) {
+      if (confirm('Ripristinare la planimetria predefinita?')) {
         appState.floorplanImage = DEFAULT_FLOORPLAN_IMG;
         imgEl.src = DEFAULT_FLOORPLAN_IMG;
         persistState();
@@ -389,7 +414,6 @@ function initInteractiveMap() {
     });
   }
 
-  // Click su sfondo vuoto per piazzare nuovo tavolo
   if (stage) {
     stage.addEventListener('click', (e) => {
       if (e.target.closest('.map-table-pin')) return;
@@ -401,6 +425,9 @@ function initInteractiveMap() {
   }
 }
 
+8/* ==========================================================================
+   RENDER MAP PINS (CON DRAG & DROP E ETICHETTE COMPATTE)
+   ========================================================================== */
 function renderMapPins() {
   const layer = document.getElementById('floorplanPinsLayer');
   const stage = document.getElementById('floorplanStage');
@@ -414,13 +441,17 @@ function renderMapPins() {
     }
 
     const totalSeats = t.guests.reduce((sum, g) => sum + (g.seats || 1), 0);
+    
+    // Sintesi del nome: rimuove "Tavolo 0X -" se presente per lasciare solo il nome (es. Rosa, Girasole)
+    const shortName = t.name.includes('-') ? t.name.split('-').slice(1).join('-').trim() : t.name;
+
     const pin = document.createElement('div');
     pin.className = 'map-table-pin';
     pin.style.left = `${t.pin.x}%`;
     pin.style.top = `${t.pin.y}%`;
     pin.innerHTML = `
       <span>T${idx + 1}</span>
-      <span class="map-pin-tag">${t.name} (${totalSeats}p)</span>
+      <span class="map-pin-tag">${shortName} (${totalSeats}p)</span>
     `;
 
     // Supporto Drag and Drop completo con Mouse e Touch
@@ -547,7 +578,7 @@ function openTableDetailFromMap(tableId) {
   showModal(`Dettagli: ${table.name}`, `
     <div style="margin-bottom:14px;">
       <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">
-        Capienza Attuale: <strong style="color:var(--gold-light);">${totalSeats} ospiti seduti</strong>
+        Capienza Attuale: <strong style="color:var(--gold-primary);">${totalSeats} ospiti seduti</strong>
       </div>
 
       <div style="max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
@@ -1001,7 +1032,7 @@ function renderBudgetModule() {
       <td><span class="badge-mini" style="border-left:2px solid ${exp.color}">${exp.category}</span></td>
       <td>${formatCurrency(exp.quote)}</td>
       <td class="text-success"><strong>${formatCurrency(exp.paid)}</strong></td>
-      <td style="color: ${diff > 0 ? '#f59e0b' : '#94a3b8'};">${formatCurrency(diff)}</td>
+      <td style="color: ${diff > 0 ? '#b8860b' : 'var(--text-dim)'};">${formatCurrency(diff)}</td>
       <td>
         <span class="badge-role ${isCompleted ? 'badge-testimoni' : 'badge-famiglia'}">
           ${isCompleted ? 'Saldato' : 'In Corso'}
@@ -1049,7 +1080,7 @@ function initBudgetHandlers() {
 
       document.getElementById('addExpenseModalForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        const colors = ['#34d399', '#d4af37', '#818cf8', '#f59e0b', '#a78bfa', '#c97587'];
+        const colors = ['#2e8b57', '#b8860b', '#6366f1', '#d97706', '#8b5cf6', '#c2788b'];
         appState.expenses.push({
           id: Date.now(),
           vendor: document.getElementById('mExpVendor').value.trim(),
@@ -1223,7 +1254,7 @@ function renderGroupsModule() {
 }
 
 /* ==========================================================================
-   10. LOCATIONS, GALLERY, UTENTI & QR
+   10. LOCATIONS, GALLERY, UTENTI
    ========================================================================== */
 function renderLocationsModule() {
   const container = document.getElementById('locationsGridContainer');
@@ -1312,6 +1343,9 @@ function renderUsersModule() {
   }
 }
 
+/* ==========================================================================
+   11. QR CODE UNIFICATO & SEGNAPOSTO DA TAVOLO
+   ========================================================================== */
 function renderQrModule() {
   const container = document.getElementById('qrCardsContainer');
   if (!container) return;
@@ -1323,7 +1357,7 @@ function renderQrModule() {
     card.innerHTML = `
       <h4>${t.name}</h4>
       <div class="qr-mock-img">SCAN ME</div>
-      <p>Inquadra per consultare il menu nuziale e caricare le tue foto live.</p>
+      <p>Menu banchetto, programma nozze e caricamento foto live.</p>
     `;
     container.appendChild(card);
   });
@@ -1344,7 +1378,7 @@ function initResetHandler() {
 }
 
 /* ==========================================================================
-   11. GESTIONE MODALI UNIVERSALI
+   12. GESTIONE MODALI UNIVERSALI
    ========================================================================== */
 function initModals() {
   const closeBtn = document.getElementById('closeModalBtn');
